@@ -18,6 +18,7 @@
     "react-hook-form": "^7.62.0",
     "tailwindcss": "^4.1.12",
     "wowds-icons": "^0.1.6",
+    "wowds-tokens": "^0.1.6",
     "wowds-ui": "^0.3.0"
   },
   "devDependencies": {

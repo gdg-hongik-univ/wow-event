@@ -26,6 +26,9 @@ importers:
       wowds-icons:
         specifier: ^0.1.6
         version: 0.1.6
+      wowds-tokens:
+        specifier: ^0.1.6
+        version: 0.1.6
       wowds-ui:
         specifier: ^0.3.0
         version: 0.3.0(next@15.5.0(@babel/core@7.28.3)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -2095,6 +2098,9 @@ packages:
   wowds-icons@0.1.6:
     resolution: {integrity: sha512-/7xLOIvHNTuOfMhSM+JfPF6MaDwS5jC6JN7JXPvo3T52l63Wy63cNskwWrZ1WaD5fHvuG9Il4p9AOB8+zp/ppg==}
 
+  wowds-tokens@0.1.6:
+    resolution: {integrity: sha512-AitpIpeuVIxz6mXevyLx2JI34ydLwgOMPzO7byb65XPs/Mhi8KJ3DQZBEBjsQ/arWjXPugVJRRIO4oMZ2lkzdg==}
+
   wowds-ui@0.3.0:
     resolution: {integrity: sha512-/+QThXjB35A5VgOwUZ5Jg62kLXieMQfKEXp9YknR7eH+pbeAZwtao6Uw9pH/NyvYfXd+/PT/3Bld1ZqEYWQEnQ==}
     peerDependencies:
@@ -3990,6 +3996,8 @@ snapshots:
   word-wrap@1.2.5: {}
 
   wowds-icons@0.1.6: {}
+
+  wowds-tokens@0.1.6: {}
 
   wowds-ui@0.3.0(next@15.5.0(@babel/core@7.28.3)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1):
     dependencies:
