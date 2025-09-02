@@ -44,7 +44,7 @@ const Flex = ({
   margin = 0,
   padding = 0,
   gap = 0,
-  bgColor = "backgroundNormal",
+  bgColor,
   radius = 0,
   width,
   style,
@@ -62,7 +62,9 @@ const Flex = ({
         borderRadius: typeof radius === "number" ? radius : wowSpace[radius],
         width: width || "100%",
         backgroundColor:
-          typeof wowColor[bgColor] === "string" ? wowColor[bgColor] : "none",
+          bgColor && typeof wowColor[bgColor] === "string"
+            ? wowColor[bgColor]
+            : "transparent",
         ...style,
       }}
     >
