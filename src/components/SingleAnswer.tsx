@@ -10,26 +10,21 @@ interface SingleAnswerProps extends BaseAnswerProps {
   options: string[];
 }
 
-const SingleAnswer = ({
-  number,
-  question,
-  description,
-  required,
-  options,
-}: SingleAnswerProps) => {
+const SingleAnswer = ({ question, required, options }: SingleAnswerProps) => {
   const textInputRef = useRef<HTMLInputElement>(null);
   return (
-    <BaseAnswer
-      number={number}
-      question={question}
-      description={description}
-      required={required}
-    >
+    <BaseAnswer question={question} required={required}>
       <RadioGroup defaultValue="">
         {options.map((item) => (
-          <RadioButton value={item} label={<Text typo="body1">{item}</Text>} />
+          <RadioButton
+            key={`radio-${item}`}
+            value={item}
+            style={{ marginBottom: "0.5rem" }}
+            label={<Text typo="body1">{item}</Text>}
+          />
         ))}
         <RadioButton
+          key={`radio-기타`}
           value="기타"
           inputProps={{
             onClick: () => {

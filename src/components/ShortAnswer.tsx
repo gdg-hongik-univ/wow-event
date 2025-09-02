@@ -3,25 +3,16 @@ import BaseAnswer, { type BaseAnswerProps } from "./BaseAnswer";
 
 interface ShortAnswerProps extends BaseAnswerProps {}
 
-const ShortAnswer = ({
-  number,
-  question,
-  description,
-  required,
-}: ShortAnswerProps) => {
+const ShortAnswer = ({ question, required }: ShortAnswerProps) => {
   return (
-    <BaseAnswer
-      number={number}
-      question={question}
-      description={description}
-      required={required}
-    >
+    <BaseAnswer question={question} required={required}>
       <input
         className="w-[460px] outline-none"
         style={{
           ...typography.body1,
           borderBottom: "solid 1px",
           borderColor: color.outline,
+          paddingBottom: "8px",
         }}
         placeholder="답변을 입력해주세요."
       />

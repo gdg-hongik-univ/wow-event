@@ -3,25 +3,24 @@ import Flex from "./Flex";
 import Text from "./Text";
 
 export interface BaseAnswerProps extends PropsWithChildren {
-  number: number;
   question: string;
-  description: string;
   required?: boolean;
 }
 
-const BaseAnswer = ({
-  number,
-  question,
-  description,
-  required,
-  children,
-}: BaseAnswerProps) => {
+const BaseAnswer = ({ question, required, children }: BaseAnswerProps) => {
   return (
-    <Flex direction="column" padding={40} gap="lg" radius="xs" width={988}>
+    <Flex
+      direction="column"
+      padding={40}
+      gap="lg"
+      radius="xs"
+      width={988}
+      bgColor="backgroundNormal"
+    >
       <Flex direction="column">
         <Flex gap="sm">
           <Text as="h2" typo="h2">
-            {`${number}. ${question}`}
+            {question}
           </Text>
           {required && (
             <Text typo="body2" color="primary">
@@ -29,9 +28,6 @@ const BaseAnswer = ({
             </Text>
           )}
         </Flex>
-        <Text typo="body1" color="sub">
-          {description}
-        </Text>
       </Flex>
       {children}
     </Flex>

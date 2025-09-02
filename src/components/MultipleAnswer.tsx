@@ -10,28 +10,23 @@ interface MultipleAnswerProps extends BaseAnswerProps {
 }
 
 const MultipleAnswer = ({
-  number,
   question,
-  description,
   required,
   options,
 }: MultipleAnswerProps) => {
   const textInputRef = useRef<HTMLInputElement>(null);
   return (
-    <BaseAnswer
-      number={number}
-      question={question}
-      description={description}
-      required={required}
-    >
+    <BaseAnswer question={question} required={required}>
       {options.map((item) => (
         <Checkbox
+          key={`check-${item}`}
           value={item}
           label={<Text typo="body1">{item}</Text>}
           style={{ color: color.textBlack }}
         />
       ))}
       <Checkbox
+        key={`check-기타`}
         value="기타"
         onClick={() => {
           textInputRef.current && textInputRef.current.focus();

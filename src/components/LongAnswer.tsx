@@ -3,25 +3,16 @@ import BaseAnswer, { type BaseAnswerProps } from "./BaseAnswer";
 
 interface LongAnswerProps extends BaseAnswerProps {}
 
-const LongAnswer = ({
-  number,
-  question,
-  description,
-  required,
-}: LongAnswerProps) => {
+const LongAnswer = ({ question, required }: LongAnswerProps) => {
   return (
-    <BaseAnswer
-      number={number}
-      question={question}
-      description={description}
-      required={required}
-    >
+    <BaseAnswer question={question} required={required}>
       <textarea
         className="w-full outline-none"
         style={{
           ...typography.body1,
           borderBottom: "solid 1px",
           borderColor: color.outline,
+          paddingBottom: "8px",
           fieldSizing: "content",
           resize: "none",
         }}
