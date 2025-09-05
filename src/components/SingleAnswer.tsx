@@ -28,7 +28,7 @@ const SingleAnswer = ({ question, required, options }: SingleAnswerProps) => {
           value="기타"
           inputProps={{
             onClick: () => {
-              textInputRef.current && textInputRef.current.focus();
+              if (textInputRef.current) textInputRef.current.focus();
             },
           }}
           label={

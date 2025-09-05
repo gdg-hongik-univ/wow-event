@@ -1,8 +1,7 @@
 import type { CSSProperties, PropsWithChildren } from "react";
-import type { color, space } from "wowds-tokens";
 import { color as wowColor, space as wowSpace } from "wowds-tokens";
-type spaceType = keyof typeof space | number;
-type colorType = keyof typeof color;
+type spaceType = keyof typeof wowSpace | number;
+type colorType = keyof typeof wowColor;
 type CSSFlexDirection = "row" | "row-reverse" | "column" | "column-reverse";
 
 type CSSJustifyContent =

@@ -1,7 +1,7 @@
 import { color, typography } from "wowds-tokens";
 import BaseAnswer, { type BaseAnswerProps } from "./BaseAnswer";
 
-interface ShortAnswerProps extends BaseAnswerProps {}
+type ShortAnswerProps = BaseAnswerProps;
 
 const ShortAnswer = ({ question, required }: ShortAnswerProps) => {
   return (

@@ -29,7 +29,7 @@ const MultipleAnswer = ({
         key={`check-기타`}
         value="기타"
         onClick={() => {
-          textInputRef.current && textInputRef.current.focus();
+          if (textInputRef.current) textInputRef.current.focus();
         }}
         label={
           <Flex gap={4}>
