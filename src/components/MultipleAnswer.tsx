@@ -7,12 +7,14 @@ import Text from "./Text";
 
 interface MultipleAnswerProps extends BaseAnswerProps {
   options: string[];
+  withEtc?: boolean;
 }
 
 const MultipleAnswer = ({
   question,
   required,
   options,
+  withEtc = false,
 }: MultipleAnswerProps) => {
   const textInputRef = useRef<HTMLInputElement>(null);
   return (
@@ -25,35 +27,37 @@ const MultipleAnswer = ({
           style={{ color: color.textBlack }}
         />
       ))}
-      <Checkbox
-        key={`check-기타`}
-        value="기타"
-        onClick={() => {
-          if (textInputRef.current) textInputRef.current.focus();
-        }}
-        label={
-          <Flex gap={4}>
-            <Text typo="body1">기타:</Text>
-            <input
-              ref={textInputRef}
-              className="w-[840px] outline-none pointer-events-none"
-              style={{
-                ...typography.body1,
-                borderBottom: "solid 1px",
-                borderColor: color.outline,
-              }}
-              onFocus={(e) => {
-                e.target.style.pointerEvents = "auto";
-                e.target.style.borderColor = color.sub;
-              }}
-              onBlur={(e) => {
-                e.target.style.pointerEvents = "none";
-                e.target.style.borderColor = color.outline;
-              }}
-            />
-          </Flex>
-        }
-      />
+      {withEtc && (
+        <Checkbox
+          key={`check-기타`}
+          value="기타"
+          onClick={() => {
+            if (textInputRef.current) textInputRef.current.focus();
+          }}
+          label={
+            <Flex gap={4}>
+              <Text typo="body1">기타:</Text>
+              <input
+                ref={textInputRef}
+                className="w-[840px] outline-none pointer-events-none"
+                style={{
+                  ...typography.body1,
+                  borderBottom: "solid 1px",
+                  borderColor: color.outline,
+                }}
+                onFocus={(e) => {
+                  e.target.style.pointerEvents = "auto";
+                  e.target.style.borderColor = color.sub;
+                }}
+                onBlur={(e) => {
+                  e.target.style.pointerEvents = "none";
+                  e.target.style.borderColor = color.outline;
+                }}
+              />
+            </Flex>
+          }
+        />
+      )}
     </BaseAnswer>
   );
 };
