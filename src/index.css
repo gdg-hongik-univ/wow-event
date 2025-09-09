@@ -1,2 +1,9 @@
 @import "tailwindcss";
 @import "wowds-ui/styles.css";
+
+body{
+    background-color: #EBF4FE;
+    padding-top: 160px;
+    padding-bottom: 160px;
+}
+

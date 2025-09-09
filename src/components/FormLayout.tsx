@@ -3,13 +3,9 @@ import { GdscLogo } from "wowds-icons";
 import Flex from "./Flex";
 import Text from "./Text";
 
-const Layout = () => {
+const FormLayout = () => {
   return (
-    <Flex
-      bgColor="blueBackgroundPressed"
-      justify="center"
-      style={{ paddingTop: 160, paddingBottom: 160 }}
-    >
+    <Flex justify="center">
       <Flex direction="column" width={988} gap={120}>
         <Flex direction="column" gap={28}>
           <GdscLogo width={90} height={44} />
@@ -35,4 +31,4 @@ const Layout = () => {
   );
 };
 
-export default Layout;
+export default FormLayout;
