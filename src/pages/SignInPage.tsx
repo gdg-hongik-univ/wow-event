@@ -1,8 +1,11 @@
+import { useNavigate } from "react-router";
 import { color } from "wowds-tokens";
 import Button from "wowds-ui/Button";
 import Flex from "../components/Flex";
 import Text from "../components/Text";
+import { RoutePath } from "../routes/routePath";
 const SignInPage = () => {
+  const navigate = useNavigate();
   return (
     <Flex direction="column" gap={60}>
       <Flex
@@ -41,10 +44,23 @@ const SignInPage = () => {
               height={18}
             />
           }
+          onClick={() => {
+            setTimeout(() => {
+              document.location.href = `${
+                import.meta.env.VITE_BASE_URL
+              }/oauth2/authorization/github`;
+            }, 250);
+          }}
         >
           GitHub 로그인
         </Button>
-        <Button onClick={() => {}}>로그인 없이 작성하기</Button>
+        <Button
+          onClick={() => {
+            navigate(RoutePath.Info);
+          }}
+        >
+          로그인 없이 작성하기
+        </Button>
       </Flex>
     </Flex>
   );
