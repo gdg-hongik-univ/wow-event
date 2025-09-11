@@ -13,7 +13,6 @@ const LongAnswer = ({ question, required }: LongAnswerProps) => {
           borderBottom: "solid 1px",
           borderColor: color.outline,
           paddingBottom: "8px",
-          fieldSizing: "content",
           resize: "none",
         }}
         placeholder="답변을 입력해주세요."
