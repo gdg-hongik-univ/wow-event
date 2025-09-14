@@ -8,9 +8,15 @@ import Text from "./Text";
 
 interface SingleAnswerProps extends BaseAnswerProps {
   options: string[];
+  withEtc?: boolean;
 }
 
-const SingleAnswer = ({ question, required, options }: SingleAnswerProps) => {
+const SingleAnswer = ({
+  question,
+  required,
+  options,
+  withEtc = false,
+}: SingleAnswerProps) => {
   const textInputRef = useRef<HTMLInputElement>(null);
   return (
     <BaseAnswer question={question} required={required}>
@@ -23,37 +29,39 @@ const SingleAnswer = ({ question, required, options }: SingleAnswerProps) => {
             label={<Text typo="body1">{item}</Text>}
           />
         ))}
-        <RadioButton
-          key={`radio-기타`}
-          value="기타"
-          inputProps={{
-            onClick: () => {
-              if (textInputRef.current) textInputRef.current.focus();
-            },
-          }}
-          label={
-            <Flex gap={4}>
-              {<Text typo="body1">기타:</Text>}
-              <input
-                ref={textInputRef}
-                className="w-[840px] outline-none pointer-events-none"
-                style={{
-                  ...typography.body1,
-                  borderBottom: "solid 1px",
-                  borderColor: color.outline,
-                }}
-                onFocus={(e) => {
-                  e.target.style.pointerEvents = "auto";
-                  e.target.style.borderColor = color.sub;
-                }}
-                onBlur={(e) => {
-                  e.target.style.pointerEvents = "none";
-                  e.target.style.borderColor = color.outline;
-                }}
-              />
-            </Flex>
-          }
-        />
+        {withEtc && (
+          <RadioButton
+            key={`radio-기타`}
+            value="기타"
+            inputProps={{
+              onClick: () => {
+                if (textInputRef.current) textInputRef.current.focus();
+              },
+            }}
+            label={
+              <Flex gap={4}>
+                {<Text typo="body1">기타:</Text>}
+                <input
+                  ref={textInputRef}
+                  className="w-[840px] outline-none pointer-events-none"
+                  style={{
+                    ...typography.body1,
+                    borderBottom: "solid 1px",
+                    borderColor: color.outline,
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.pointerEvents = "auto";
+                    e.target.style.borderColor = color.sub;
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.pointerEvents = "none";
+                    e.target.style.borderColor = color.outline;
+                  }}
+                />
+              </Flex>
+            }
+          />
+        )}
       </RadioGroup>
     </BaseAnswer>
   );

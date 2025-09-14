@@ -1,9 +1,11 @@
 import { color, typography } from "wowds-tokens";
 import BaseAnswer, { type BaseAnswerProps } from "./BaseAnswer";
 
-type ShortAnswerProps = BaseAnswerProps;
+interface ShortAnswerProps extends BaseAnswerProps {
+  placeholder?: string;
+}
 
-const ShortAnswer = ({ question, required }: ShortAnswerProps) => {
+const ShortAnswer = ({ question, required, placeholder }: ShortAnswerProps) => {
   return (
     <BaseAnswer question={question} required={required}>
       <input
@@ -14,7 +16,7 @@ const ShortAnswer = ({ question, required }: ShortAnswerProps) => {
           borderColor: color.outline,
           paddingBottom: "8px",
         }}
-        placeholder="답변을 입력해주세요."
+        placeholder={placeholder || "답변을 입력해주세요."}
       />
     </BaseAnswer>
   );
