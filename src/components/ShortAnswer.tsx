@@ -1,11 +1,18 @@
+import type { UseFormRegisterReturn } from "react-hook-form";
 import { color, typography } from "wowds-tokens";
 import BaseAnswer, { type BaseAnswerProps } from "./BaseAnswer";
 
 interface ShortAnswerProps extends BaseAnswerProps {
   placeholder?: string;
+  register: UseFormRegisterReturn;
 }
 
-const ShortAnswer = ({ question, required, placeholder }: ShortAnswerProps) => {
+const ShortAnswer = ({
+  question,
+  required,
+  placeholder,
+  register,
+}: ShortAnswerProps) => {
   return (
     <BaseAnswer question={question} required={required}>
       <input
@@ -17,6 +24,7 @@ const ShortAnswer = ({ question, required, placeholder }: ShortAnswerProps) => {
           paddingBottom: "8px",
         }}
         placeholder={placeholder || "답변을 입력해주세요."}
+        {...register}
       />
     </BaseAnswer>
   );
