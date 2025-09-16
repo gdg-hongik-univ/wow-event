@@ -1,10 +1,10 @@
 import { FormProvider, useForm } from "react-hook-form";
 import { RouterProvider } from "react-router";
 import Router from "./routes/Router";
-import type { FormSubmitDtoType } from "./types/form";
+import type { EventApplyDtoType } from "./types/event";
 
 function App() {
-  const method = useForm<FormSubmitDtoType>({
+  const method = useForm<EventApplyDtoType>({
     defaultValues: {
       eventId: undefined,
       participant: { name: undefined, studentId: undefined, phone: undefined },

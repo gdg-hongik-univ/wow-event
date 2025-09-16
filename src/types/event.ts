@@ -1,3 +1,6 @@
+export type QuestionStatus = "ENABLED" | "DISABLED";
+export type AfterPartyStatus = "NONE" | "NOT_APPLIED" | "APPLIED";
+
 export interface EventDtoType {
   eventId: number;
   name: string;
@@ -8,12 +11,18 @@ export interface EventDtoType {
     startDate: string;
     endDate: string;
   };
-  regularRoleOnlyStatus: "ENABLED" | "DISABLED";
-  afterPartyStatus: "ENABLED" | "DISABLED";
-  prePaymentStatus: "ENABLED" | "DISABLED";
-  postPaymentStatus: "ENABLED" | "DISABLED";
-  rsvpQuestionStatus: "ENABLED" | "DISABLED";
-  noticeConfirmQuestionStatus: "ENABLED" | "DISABLED";
+  regularRoleOnlyStatus: QuestionStatus;
+  afterPartyStatus: QuestionStatus;
+  prePaymentStatus: QuestionStatus;
+  postPaymentStatus: QuestionStatus;
+  rsvpQuestionStatus: QuestionStatus;
+  noticeConfirmQuestionStatus: QuestionStatus;
   mainEventMaxApplicantCount: number;
   afterPartyMaxApplicantCount: number;
+}
+
+export interface EventApplyDtoType {
+  eventId: number;
+  participant: { name: string; studentId: string; phone: string };
+  afterPartyApplicationStatus: AfterPartyStatus;
 }
