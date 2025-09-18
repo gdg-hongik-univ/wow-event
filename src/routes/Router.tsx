@@ -1,14 +1,15 @@
 import { createBrowserRouter, type RouteObject } from "react-router";
-import FormLayout from "../components/FormLayout";
+import ErrorPage from "../pages/ErrorPage";
 import FormPage from "../pages/FormPage";
 import NotFoundErrorPage from "../pages/NotFoundPage";
 import { RoutePath } from "./routePath";
 
 const routes: RouteObject[] = [
   {
-    element: <FormLayout />,
-    children: [{ path: RoutePath.Form, element: <FormPage /> }],
+    path: RoutePath.Form,
+    element: <FormPage />,
   },
+  { path: RoutePath.Error, element: <ErrorPage /> },
   { path: "*", element: <NotFoundErrorPage /> },
 ];
 
