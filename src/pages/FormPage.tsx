@@ -8,11 +8,11 @@ import { GdscLogo } from "wowds-icons";
 import Button from "wowds-ui/Button";
 import { eventUpdater } from "../apis/eventUpdater";
 import { fetcher } from "../apis/fetcher";
-import Flex from "../components/Flex";
+import ShortAnswer from "../components/answer/ShortAnswer";
+import SingleAnswer from "../components/answer/SingleAnswer";
+import Flex from "../components/base/Flex";
+import Text from "../components/base/Text";
 import MemberAuthModal from "../components/MemberAuthModal";
-import ShortAnswer from "../components/ShortAnswer";
-import SingleAnswer from "../components/SingleAnswer";
-import Text from "../components/Text";
 import type { EventApplyDtoType, EventDtoType } from "../types/event";
 
 const FormPage = () => {

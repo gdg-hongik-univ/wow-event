@@ -1,6 +1,6 @@
 import { useLocation } from "react-router";
-import Flex from "../components/Flex";
-import Text from "../components/Text";
+import Flex from "../components/base/Flex";
+import Text from "../components/base/Text";
 
 const ErrorPage = () => {
   const location = useLocation();

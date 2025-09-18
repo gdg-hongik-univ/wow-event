@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import { Close } from "wowds-icons";
 import { color } from "wowds-tokens";
 import Button from "wowds-ui/Button";
-import Flex from "./Flex";
-import Text from "./Text";
+import Flex from "./base/Flex";
+import Text from "./base/Text";
 
 interface MemberAuthModalProp {
   onClose: () => void;

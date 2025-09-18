@@ -2,9 +2,9 @@ import { useRef } from "react";
 import { color, typography } from "wowds-tokens";
 import RadioButton from "wowds-ui/RadioButton";
 import RadioGroup from "wowds-ui/RadioGroup";
+import Flex from "../base/Flex";
+import Text from "../base/Text";
 import BaseAnswer, { type BaseAnswerProps } from "./BaseAnswer";
-import Flex from "./Flex";
-import Text from "./Text";
 
 interface SingleAnswerProps extends BaseAnswerProps {
   options: string[];

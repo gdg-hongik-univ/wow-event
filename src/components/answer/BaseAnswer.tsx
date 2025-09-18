@@ -1,6 +1,6 @@
 import { type PropsWithChildren } from "react";
-import Flex from "./Flex";
-import Text from "./Text";
+import Flex from "../base/Flex";
+import Text from "../base/Text";
 
 export interface BaseAnswerProps extends PropsWithChildren {
   question: string;

@@ -1,9 +1,9 @@
 import { useRef } from "react";
 import { color, typography } from "wowds-tokens";
 import Checkbox from "wowds-ui/Checkbox";
+import Flex from "../base/Flex";
+import Text from "../base/Text";
 import BaseAnswer, { type BaseAnswerProps } from "./BaseAnswer";
-import Flex from "./Flex";
-import Text from "./Text";
 
 interface MultipleAnswerProps extends BaseAnswerProps {
   options: string[];
