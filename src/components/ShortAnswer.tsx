@@ -23,6 +23,7 @@ const ShortAnswer = ({
           borderColor: color.outline,
           paddingBottom: "8px",
         }}
+        autoComplete="off"
         placeholder={placeholder || "답변을 입력해주세요."}
         {...register}
       />
