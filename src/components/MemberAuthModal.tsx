@@ -60,10 +60,10 @@ const MemberAuthModal = ({ onClose }: MemberAuthModalProp) => {
         <Flex direction="column" gap={40} align="center">
           <Flex justify="center">
             <Text as="p" typo="h1" color="primary">
-              비회원
+              정회원
             </Text>
             <Text as={"p"} typo="h1">
-              은 신청할 수 없는 행사에요.
+              만 신청할 수 있는 행사에요.
             </Text>
           </Flex>
           <Button style={{ width: 173 }} onClick={onClose}>
