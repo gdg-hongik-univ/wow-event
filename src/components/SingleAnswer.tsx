@@ -8,23 +8,35 @@ import Text from "./Text";
 
 interface SingleAnswerProps extends BaseAnswerProps {
   options: string[];
+  optionValues?: string[];
+  value?: string;
   withEtc?: boolean;
+  onChange: (value: any) => void;
 }
 
 const SingleAnswer = ({
   question,
+  optionValues,
+  value,
   required,
   options,
   withEtc = false,
+  onChange,
 }: SingleAnswerProps) => {
   const textInputRef = useRef<HTMLInputElement>(null);
   return (
     <BaseAnswer question={question} required={required}>
-      <RadioGroup defaultValue="">
-        {options.map((item) => (
+      <RadioGroup
+        defaultValue=""
+        onChange={(e) => {
+          onChange(e.target.value);
+        }}
+        value={value}
+      >
+        {options.map((item, idx) => (
           <RadioButton
             key={`radio-${item}`}
-            value={item}
+            value={optionValues ? optionValues[idx] : item}
             style={{ marginBottom: "0.5rem" }}
             label={<Text typo="body1">{item}</Text>}
           />
