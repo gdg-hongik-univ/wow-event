@@ -12,7 +12,7 @@ import ShortAnswer from "../components/answer/ShortAnswer";
 import SingleAnswer from "../components/answer/SingleAnswer";
 import Flex from "../components/base/Flex";
 import Text from "../components/base/Text";
-import MemberAuthModal from "../components/MemberAuthModal";
+import ErrorModal from "../components/ErrorModal";
 import type { EventApplyDtoType, EventDtoType } from "../types/event";
 
 const FormPage = () => {
@@ -54,7 +54,7 @@ const FormPage = () => {
   const [rsvpConfirmed, setRsvpConfirmed] = useState<boolean | undefined>(
     undefined
   );
-  const [showMemberAuthModal, setShowMemberAuthModal] = useState(false);
+  const [errorModalStatus, setErrorModalStatus] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
@@ -111,8 +111,15 @@ const FormPage = () => {
   ) : (
     eventData && (
       <Flex justify="center">
-        {showMemberAuthModal && (
-          <MemberAuthModal onClose={() => setShowMemberAuthModal(false)} />
+        {errorModalStatus.length !== 0 && (
+          <ErrorModal
+            onClose={() => setErrorModalStatus("")}
+            errorMsg={
+              errorModalStatus === "DUPLICATE"
+                ? "이미 해당 이벤트를 신청했습니다."
+                : undefined
+            }
+          />
         )}
         <Flex direction="column" width={988} gap={120}>
           <Flex direction="column" gap={28}>
@@ -215,14 +222,28 @@ const FormPage = () => {
                       .then(() => {
                         setIsSubmitted(true);
                       })
-                      .catch((error) => {
-                        if (
-                          eventData?.regularRoleOnlyStatus === "ENABLED" &&
-                          error?.status === 409
-                        ) {
-                          setShowMemberAuthModal(true);
+                      .catch(
+                        (
+                          error: AxiosError<{
+                            errorCodeName: string;
+                            errorMessage: string;
+                          }>
+                        ) => {
+                          console.log(error.response);
+                          if (
+                            eventData?.regularRoleOnlyStatus === "ENABLED" &&
+                            error?.response?.data.errorCodeName ===
+                              "EVENT_NOT_APPLICABLE_NOT_REGULAR_ROLE"
+                          ) {
+                            setErrorModalStatus("REGULAR");
+                          } else if (
+                            error.response?.data.errorCodeName ===
+                            "PARTICIPATION_DUPLICATE"
+                          ) {
+                            setErrorModalStatus("DUPLICATE");
+                          }
                         }
-                      });
+                      );
                   })}
                 >
                   제출
