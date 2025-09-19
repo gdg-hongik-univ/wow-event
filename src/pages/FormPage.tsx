@@ -160,7 +160,7 @@ const FormPage = () => {
               <ShortAnswer
                 question="전화번호를 입력해주세요."
                 required
-                placeholder="Ex. 010-1234-5678"
+                placeholder="Ex. 01012345678"
                 register={register("participant.phone")}
               />
               {noticeConfirmed !== undefined && (
