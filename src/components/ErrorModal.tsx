@@ -2,14 +2,15 @@ import { useEffect } from "react";
 import { Close } from "wowds-icons";
 import { color } from "wowds-tokens";
 import Button from "wowds-ui/Button";
-import Flex from "./Flex";
-import Text from "./Text";
+import Flex from "./base/Flex";
+import Text from "./base/Text";
 
-interface MemberAuthModalProp {
+interface ErrorModalProp {
   onClose: () => void;
+  errorMsg?: string;
 }
 
-const MemberAuthModal = ({ onClose }: MemberAuthModalProp) => {
+const ErrorModal = ({ onClose, errorMsg }: ErrorModalProp) => {
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => {
@@ -59,12 +60,16 @@ const MemberAuthModal = ({ onClose }: MemberAuthModalProp) => {
         />
         <Flex direction="column" gap={40} align="center">
           <Flex justify="center">
-            <Text as="p" typo="h1" color="primary">
-              비회원
-            </Text>
-            <Text as={"p"} typo="h1">
-              은 신청할 수 없는 행사에요.
-            </Text>
+            {errorMsg ? (
+              <Text typo="h1">{errorMsg}</Text>
+            ) : (
+              <>
+                <Text typo="h1" color="primary">
+                  정회원
+                </Text>
+                <Text typo="h1">만 신청할 수 있는 행사에요.</Text>
+              </>
+            )}
           </Flex>
           <Button style={{ width: 173 }} onClick={onClose}>
             확인
@@ -75,4 +80,4 @@ const MemberAuthModal = ({ onClose }: MemberAuthModalProp) => {
   );
 };
 
-export default MemberAuthModal;
+export default ErrorModal;
