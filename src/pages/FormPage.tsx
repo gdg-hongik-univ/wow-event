@@ -18,14 +18,16 @@ import type { EventApplyDtoType, EventDtoType } from "../types/event";
 const FormPage = () => {
   const { eventId } = useParams();
   const navigate = useNavigate();
-  const { trigger, error: mutationError } = useSWRMutation<
-    any,
-    AxiosError,
-    string,
-    EventApplyDtoType
-  >("/participant/event-participations/apply", eventUpdater);
+  const {
+    trigger,
+    error: mutationError,
+    isMutating,
+  } = useSWRMutation<any, AxiosError, string, EventApplyDtoType>(
+    "/participant/event-participations/apply",
+    eventUpdater
+  );
   const { data: eventData, error: fetchError } = useSWR<EventDtoType>(
-    `/participant/events/${eventId}`,
+    eventId ? `/participant/events/${eventId}` : null,
     fetcher
   );
   const startDate = eventData && new Date(eventData.startAt);
@@ -37,11 +39,11 @@ const FormPage = () => {
 
   const { register, watch, setValue, handleSubmit } =
     useFormContext<EventApplyDtoType>();
-  const watchedData = watch();
-  const {
-    participant: { name, studentId, phone },
-    afterPartyApplicationStatus,
-  } = watchedData;
+  const name = watch("participant.name");
+  const studentId = watch("participant.studentId");
+  const phone = watch("participant.phone");
+  const afterPartyApplicationStatus = watch("afterPartyApplicationStatus");
+  const watchedEventId = watch("eventId");
 
   const [noticeConfirmed, setNoticeConfirmed] = useState<boolean | undefined>(
     undefined
@@ -90,10 +92,9 @@ const FormPage = () => {
         eventData.rsvpQuestionStatus === "ENABLED"
       )
         setRsvpConfirmed(false);
-      if (watchedData.eventId === undefined)
-        setValue("eventId", eventData.eventId);
+      if (watchedEventId === undefined) setValue("eventId", eventData.eventId);
     }
-  }, [eventData, watchedData, mutationError]);
+  }, [eventData, watchedEventId, mutationError]);
 
   const isValid =
     name &&
@@ -163,7 +164,7 @@ const FormPage = () => {
                   value={noticeConfirmed?.toString()}
                   required
                   onChange={(value) => {
-                    setNoticeConfirmed(value);
+                    setNoticeConfirmed(value === "true");
                   }}
                 />
               )}
@@ -190,7 +191,7 @@ const FormPage = () => {
                     value={prepaymentConfirmed?.toString()}
                     required
                     onChange={(value) => {
-                      setPrepaymentConfirmed(value);
+                      setPrepaymentConfirmed(value === "true");
                     }}
                   />
                 )}
@@ -201,13 +202,13 @@ const FormPage = () => {
                   optionValues={["true"]}
                   value={rsvpConfirmed?.toString()}
                   onChange={(value) => {
-                    setRsvpConfirmed(value);
+                    setRsvpConfirmed(value === "true");
                   }}
                 />
               )}
               <Flex gap="lg">
                 <Button
-                  disabled={!isValid}
+                  disabled={!isValid || isMutating}
                   style={{ width: 120 }}
                   onClick={handleSubmit((data) => {
                     trigger(data)
