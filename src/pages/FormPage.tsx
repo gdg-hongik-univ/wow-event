@@ -58,7 +58,7 @@ const FormPage = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
-    if (eventData) {
+    if (eventData?.applicationPeriod) {
       const today = new Date();
       const applicationStartDate = new Date(
         eventData.applicationPeriod.startDate
@@ -229,7 +229,6 @@ const FormPage = () => {
                             errorMessage: string;
                           }>
                         ) => {
-                          console.log(error.response);
                           if (
                             eventData?.regularRoleOnlyStatus === "ENABLED" &&
                             error?.response?.data.errorCodeName ===
