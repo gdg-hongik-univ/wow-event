@@ -94,7 +94,7 @@ const FormPage = () => {
         setRsvpConfirmed(false);
       if (watchedEventId === undefined) setValue("eventId", eventData.eventId);
     }
-  }, [eventData, watchedEventId, mutationError]);
+  }, [eventData, watchedEventId, afterPartyApplicationStatus]);
 
   const isValid =
     name &&
