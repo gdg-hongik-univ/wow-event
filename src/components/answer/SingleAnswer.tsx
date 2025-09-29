@@ -11,7 +11,7 @@ interface SingleAnswerProps extends BaseAnswerProps {
   optionValues?: string[];
   value?: string;
   withEtc?: boolean;
-  onChange: (value: any) => void;
+  onChange?: (value: any) => void;
 }
 
 const SingleAnswer = ({
@@ -28,9 +28,12 @@ const SingleAnswer = ({
     <BaseAnswer question={question} required={required}>
       <RadioGroup
         defaultValue=""
-        onChange={(e) => {
-          onChange(e.target.value);
-        }}
+        onChange={
+          onChange &&
+          ((e) => {
+            onChange(e.target.value);
+          })
+        }
         value={value}
       >
         {options.map((item, idx) => (
