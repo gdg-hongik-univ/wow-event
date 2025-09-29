@@ -1,4 +1,4 @@
-import type { CSSProperties, PropsWithChildren } from "react";
+import type { CSSProperties, HTMLAttributes } from "react";
 import { color as wowColor, space as wowSpace } from "wowds-tokens";
 type spaceType = keyof typeof wowSpace | number;
 type colorType = keyof typeof wowColor;
@@ -22,7 +22,7 @@ type CSSAlignItems =
   | "baseline"
   | "start"
   | "end";
-interface FlexProps extends PropsWithChildren {
+interface FlexProps extends HTMLAttributes<HTMLDivElement> {
   direction?: CSSFlexDirection;
   justify?: CSSJustifyContent;
   align?: CSSAlignItems;
@@ -31,7 +31,7 @@ interface FlexProps extends PropsWithChildren {
   gap?: spaceType;
   bgColor?: colorType;
   radius?: spaceType;
-  width?: number;
+  width?: string | number;
   style?: CSSProperties;
 }
 
@@ -47,11 +47,13 @@ const Flex = ({
   radius = 0,
   width,
   style,
+  ...props
 }: FlexProps) => {
   return (
     <div
-      className="flex box-border"
       style={{
+        display: "flex",
+        boxSizing: "border-box",
         flexDirection: direction,
         justifyContent: justify,
         alignItems: align,
@@ -63,9 +65,10 @@ const Flex = ({
         backgroundColor:
           bgColor && typeof wowColor[bgColor] === "string"
             ? wowColor[bgColor]
-            : "transparent",
+            : "none",
         ...style,
       }}
+      {...props}
     >
       {children}
     </div>
