@@ -1,63 +1,30 @@
-import type { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
-import useSWR from "swr";
-import useSWRMutation from "swr/mutation";
-import { GdscLogo } from "wowds-icons";
-import Button from "wowds-ui/Button";
-import { eventUpdater } from "../apis/eventUpdater";
-import { fetcher } from "../apis/fetcher";
-import ShortAnswer from "../components/answer/ShortAnswer";
-import SingleAnswer from "../components/answer/SingleAnswer";
 import Flex from "../components/base/Flex";
 import Text from "../components/base/Text";
 import ErrorModal from "../components/ErrorModal";
-import type { EventApplyDtoType, EventDtoType } from "../types/event";
+import FormDescription from "../components/FormDescription";
+import FormQuestions from "../components/FormQuestions";
+import FormTitle from "../components/FormTitle";
+import { useEventFetcher } from "../hooks/useFetch";
+import { useResponsive } from "../hooks/useResponsive";
+import type { EventApplyDtoType } from "../types/event";
 
 const FormPage = () => {
+  const { isMobile } = useResponsive();
   const { eventId } = useParams();
   const navigate = useNavigate();
-  const {
-    trigger,
-    error: mutationError,
-    isMutating,
-  } = useSWRMutation<any, AxiosError, string, EventApplyDtoType>(
-    "/participant/event-participations/apply",
-    eventUpdater
-  );
-  const { data: eventData, error: fetchError } = useSWR<EventDtoType>(
-    eventId ? `/participant/events/${eventId}` : null,
-    fetcher
-  );
-  const startDate = eventData && new Date(eventData.startAt);
-  const showDate =
-    startDate &&
-    `${startDate.getFullYear()}년 ${
-      startDate.getMonth() + 1
-    }월 ${startDate.getDate()}일 ${startDate.getHours()}시 ${startDate.getMinutes()}분`;
 
-  const { register, watch, setValue, handleSubmit } =
-    useFormContext<EventApplyDtoType>();
-  const name = watch("participant.name");
-  const studentId = watch("participant.studentId");
-  const phone = watch("participant.phone");
-  const afterPartyApplicationStatus = watch("afterPartyApplicationStatus");
+  const { data: eventData, error: fetchError } = useEventFetcher(eventId);
+  const { watch, setValue } = useFormContext<EventApplyDtoType>();
+
   const watchedEventId = watch("eventId");
-
-  const [noticeConfirmed, setNoticeConfirmed] = useState<boolean | undefined>(
-    undefined
-  );
-  const [prepaymentConfirmed, setPrepaymentConfirmed] = useState<
-    boolean | undefined
-  >(undefined);
-  const [rsvpConfirmed, setRsvpConfirmed] = useState<boolean | undefined>(
-    undefined
-  );
   const [errorModalStatus, setErrorModalStatus] = useState("");
-  const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
+    if (watchedEventId === undefined && eventData)
+      setValue("eventId", eventData.eventId);
     if (eventData?.applicationPeriod) {
       const today = new Date();
       const applicationStartDate = new Date(
@@ -70,39 +37,11 @@ const FormPage = () => {
           state: { message: "이벤트 신청 기간이 아닙니다." },
           replace: true,
         });
-        return;
       }
-
-      if (eventData.afterPartyStatus === "DISABLED")
-        setValue("afterPartyApplicationStatus", "NONE");
-      if (
-        noticeConfirmed === undefined &&
-        eventData.noticeConfirmQuestionStatus === "ENABLED"
-      )
-        setNoticeConfirmed(false);
-      if (
-        afterPartyApplicationStatus === "APPLIED" &&
-        prepaymentConfirmed === undefined &&
-        eventData.prePaymentStatus === "ENABLED"
-      )
-        setPrepaymentConfirmed(false);
-
-      if (
-        rsvpConfirmed === undefined &&
-        eventData.rsvpQuestionStatus === "ENABLED"
-      )
-        setRsvpConfirmed(false);
-      if (watchedEventId === undefined) setValue("eventId", eventData.eventId);
     }
-  }, [eventData, watchedEventId, afterPartyApplicationStatus]);
-
-  const isValid =
-    name &&
-    studentId &&
-    phone &&
-    (afterPartyApplicationStatus === "NONE" || afterPartyApplicationStatus) &&
-    (noticeConfirmed === undefined || noticeConfirmed) &&
-    (prepaymentConfirmed === undefined || prepaymentConfirmed);
+    if (eventData?.afterPartyStatus === "DISABLED")
+      setValue("afterPartyApplicationStatus", "NONE");
+  }, [eventData, watchedEventId]);
 
   return fetchError ? (
     <Flex direction="column" justify="center" align="center">
@@ -121,135 +60,26 @@ const FormPage = () => {
             }
           />
         )}
-        <Flex direction="column" width={988} gap={120}>
-          <Flex direction="column" gap={28}>
-            <GdscLogo width={90} height={44} />
-            <Flex direction="column" gap={40}>
-              <Text as={"h1"} typo="display1">
-                {eventData.name}
-              </Text>
-              {!isSubmitted && (
-                <Text>
-                  행사 일시: {showDate}
-                  <br />
-                  행사 장소: {eventData.venue}
-                  <br />
-                  <br />
-                  {eventData.applicationDescription}
-                </Text>
-              )}
-            </Flex>
+        <Flex direction="column" align="center" gap={isMobile ? 20 : 40}>
+          <FormTitle title={eventData.name} />
+          <Flex
+            direction="column"
+            align="center"
+            width={"min(988px, 90%)"}
+            gap={isMobile ? 28 : 120}
+          >
+            <FormDescription
+              startAt={eventData.startAt}
+              venue={eventData.venue}
+              applicationDescription={eventData.applicationDescription}
+            />
+            <FormQuestions
+              event={eventData}
+              modalHandler={() => {
+                setErrorModalStatus("REGULAR");
+              }}
+            />
           </Flex>
-
-          {isSubmitted ? (
-            <Text>응답이 기록되었습니다.</Text>
-          ) : (
-            <Flex direction="column" gap={60}>
-              <ShortAnswer
-                question="이름을 입력해주세요."
-                required
-                placeholder="Ex. 홍길동"
-                register={register("participant.name")}
-              />
-              <ShortAnswer
-                question="학번을 입력해주세요."
-                required
-                placeholder="Ex. C123456"
-                register={register("participant.studentId")}
-              />
-              <ShortAnswer
-                question="전화번호를 입력해주세요."
-                required
-                placeholder="Ex. 01012345678"
-                register={register("participant.phone")}
-              />
-              {noticeConfirmed !== undefined && (
-                <SingleAnswer
-                  question="유의사항을 확인하셨나요?"
-                  options={["예, 확인했습니다."]}
-                  optionValues={["true"]}
-                  value={noticeConfirmed?.toString()}
-                  required
-                  onChange={(value) => {
-                    setNoticeConfirmed(value === "true");
-                  }}
-                />
-              )}
-              {afterPartyApplicationStatus !== "NONE" && (
-                <SingleAnswer
-                  question="뒤풀이에 참여하시나요?"
-                  options={["참여합니다.", "참여하지 않습니다."]}
-                  optionValues={["APPLIED", "NOT_APPLIED"]}
-                  value={afterPartyApplicationStatus}
-                  onChange={(value) => {
-                    setValue("afterPartyApplicationStatus", value);
-                    if (value === "NOT_APPLIED")
-                      setPrepaymentConfirmed(undefined);
-                  }}
-                  required
-                />
-              )}
-              {afterPartyApplicationStatus === "APPLIED" &&
-                prepaymentConfirmed !== undefined && (
-                  <SingleAnswer
-                    question="선입금을 완료하였나요?"
-                    options={["예, 완료했습니다."]}
-                    optionValues={["true"]}
-                    value={prepaymentConfirmed?.toString()}
-                    required
-                    onChange={(value) => {
-                      setPrepaymentConfirmed(value === "true");
-                    }}
-                  />
-                )}
-              {rsvpConfirmed !== undefined && (
-                <SingleAnswer
-                  question="bevy 페이지에 가입하신 분은 RSVP를 등록해주세요."
-                  options={["등록 완료했습니다."]}
-                  optionValues={["true"]}
-                  value={rsvpConfirmed?.toString()}
-                  onChange={(value) => {
-                    setRsvpConfirmed(value === "true");
-                  }}
-                />
-              )}
-              <Flex gap="lg">
-                <Button
-                  disabled={!isValid || isMutating}
-                  style={{ width: 120 }}
-                  onClick={handleSubmit((data) => {
-                    trigger(data)
-                      .then(() => {
-                        setIsSubmitted(true);
-                      })
-                      .catch(
-                        (
-                          error: AxiosError<{
-                            errorCodeName: string;
-                            errorMessage: string;
-                          }>
-                        ) => {
-                          if (
-                            eventData?.regularRoleOnlyStatus === "ENABLED" &&
-                            error?.response?.data.errorCodeName ===
-                              "EVENT_NOT_APPLICABLE_NOT_REGULAR_ROLE"
-                          ) {
-                            setErrorModalStatus("REGULAR");
-                          } else if (
-                            error.response?.data.errorCodeName ===
-                            "PARTICIPATION_DUPLICATE"
-                          ) {
-                            setErrorModalStatus("DUPLICATE");
-                          }
-                        }
-                      );
-                  })}
-                >
-                  제출
-                </Button>
-              </Flex>
-            </Flex>
-          )}
         </Flex>
       </Flex>
     )
