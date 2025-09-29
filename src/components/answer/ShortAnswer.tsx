@@ -19,6 +19,7 @@ const ShortAnswer = ({
         className="w-[460px] outline-none"
         style={{
           ...typography.body1,
+          width: "100%",
           borderBottom: "solid 1px",
           borderColor: color.outline,
           paddingBottom: "8px",
