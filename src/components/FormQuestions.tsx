@@ -18,13 +18,8 @@ const FormQuestions = ({ event, modalHandler }: FormQuestionProp) => {
   const [noticeConfirmed, setNoticeConfirmed] = useState("false");
   const [prePaymentConfirmed, setPrePaymentConfirmed] = useState("false");
 
-  const {
-    register,
-    watch,
-    setValue,
-    handleSubmit,
-    formState: { isSubmitSuccessful },
-  } = useFormContext<EventApplyDtoType>();
+  const { register, watch, setValue, handleSubmit } =
+    useFormContext<EventApplyDtoType>();
 
   const name = watch("participant.name");
   const studentId = watch("participant.studentId");

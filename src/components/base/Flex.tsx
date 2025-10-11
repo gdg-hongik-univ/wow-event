@@ -62,10 +62,10 @@ const Flex = ({
         padding: typeof padding === "number" ? padding : wowSpace[padding],
         borderRadius: typeof radius === "number" ? radius : wowSpace[radius],
         width: width || "100%",
-        backgroundColor:
-          bgColor && typeof wowColor[bgColor] === "string"
-            ? wowColor[bgColor]
-            : "none",
+        ...(bgColor &&
+          typeof wowColor[bgColor] === "string" && {
+            backgroundColor: wowColor[bgColor],
+          }),
         ...style,
       }}
       {...props}

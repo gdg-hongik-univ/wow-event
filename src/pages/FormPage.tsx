@@ -17,7 +17,11 @@ const FormPage = () => {
   const navigate = useNavigate();
 
   const { data: eventData, error: fetchError } = useEventFetcher(eventId);
-  const { watch, setValue } = useFormContext<EventApplyDtoType>();
+  const {
+    watch,
+    setValue,
+    formState: { isSubmitSuccessful },
+  } = useFormContext<EventApplyDtoType>();
 
   const watchedEventId = watch("eventId");
   const [errorModalStatus, setErrorModalStatus] = useState("");
@@ -62,24 +66,28 @@ const FormPage = () => {
         )}
         <Flex direction="column" align="center" gap={isMobile ? 20 : 40}>
           <FormTitle title={eventData.name} />
-          <Flex
-            direction="column"
-            align="center"
-            width={"min(988px, 90%)"}
-            gap={isMobile ? 28 : 120}
-          >
-            <FormDescription
-              startAt={eventData.startAt}
-              venue={eventData.venue}
-              applicationDescription={eventData.applicationDescription}
-            />
-            <FormQuestions
-              event={eventData}
-              modalHandler={() => {
-                setErrorModalStatus("REGULAR");
-              }}
-            />
-          </Flex>
+          {isSubmitSuccessful ? (
+            <Text>성공적으로 신청되었어요.</Text>
+          ) : (
+            <Flex
+              direction="column"
+              align="center"
+              width={"min(988px, 90%)"}
+              gap={isMobile ? 28 : 120}
+            >
+              <FormDescription
+                startAt={eventData.startAt}
+                venue={eventData.venue}
+                applicationDescription={eventData.applicationDescription}
+              />
+              <FormQuestions
+                event={eventData}
+                modalHandler={() => {
+                  setErrorModalStatus("REGULAR");
+                }}
+              />
+            </Flex>
+          )}
         </Flex>
       </Flex>
     )
