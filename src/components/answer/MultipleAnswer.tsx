@@ -39,9 +39,11 @@ const MultipleAnswer = ({
               <Text typo="body1">기타:</Text>
               <input
                 ref={textInputRef}
-                className="w-[840px] outline-none pointer-events-none"
                 style={{
                   ...typography.body1,
+                  width: 840,
+                  outlineStyle: "none",
+                  pointerEvents: "none",
                   borderBottom: "solid 1px",
                   borderColor: color.outline,
                 }}

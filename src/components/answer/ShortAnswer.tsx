@@ -16,9 +16,10 @@ const ShortAnswer = ({
   return (
     <BaseAnswer question={question} required={required}>
       <input
-        className="w-[460px] outline-none"
         style={{
           ...typography.body1,
+          width: "100%",
+          outlineStyle: "none",
           borderBottom: "solid 1px",
           borderColor: color.outline,
           paddingBottom: "8px",

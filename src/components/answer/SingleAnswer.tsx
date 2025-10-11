@@ -11,7 +11,7 @@ interface SingleAnswerProps extends BaseAnswerProps {
   optionValues?: string[];
   value?: string;
   withEtc?: boolean;
-  onChange: (value: any) => void;
+  onChange?: (value: any) => void;
 }
 
 const SingleAnswer = ({
@@ -28,9 +28,12 @@ const SingleAnswer = ({
     <BaseAnswer question={question} required={required}>
       <RadioGroup
         defaultValue=""
-        onChange={(e) => {
-          onChange(e.target.value);
-        }}
+        onChange={
+          onChange &&
+          ((e) => {
+            onChange(e.target.value);
+          })
+        }
         value={value}
       >
         {options.map((item, idx) => (
@@ -55,9 +58,11 @@ const SingleAnswer = ({
                 {<Text typo="body1">기타:</Text>}
                 <input
                   ref={textInputRef}
-                  className="w-[840px] outline-none pointer-events-none"
                   style={{
                     ...typography.body1,
+                    width: 840,
+                    outlineStyle: "none",
+                    pointerEvents: "none",
                     borderBottom: "solid 1px",
                     borderColor: color.outline,
                   }}
