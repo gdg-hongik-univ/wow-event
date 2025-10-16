@@ -1,9 +1,9 @@
-import type { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 import Button from "wowds-ui/Button";
 import { useEventMutation } from "../hooks/useMutation";
+import type { ErrorCodeType } from "../types/error";
 import type { EventApplyDtoType, EventDtoType } from "../types/event";
 import ShortAnswer from "./answer/ShortAnswer";
 import SingleAnswer from "./answer/SingleAnswer";
@@ -11,10 +11,10 @@ import Flex from "./base/Flex";
 
 interface FormQuestionProp {
   event: EventDtoType;
-  modalHandler: () => void;
+  errorHandler: (errorCode: ErrorCodeType) => void;
 }
 
-const FormQuestions = ({ event, modalHandler }: FormQuestionProp) => {
+const FormQuestions = ({ event, errorHandler }: FormQuestionProp) => {
   const [noticeConfirmed, setNoticeConfirmed] = useState("false");
   const [prePaymentConfirmed, setPrePaymentConfirmed] = useState("false");
 
@@ -115,28 +115,24 @@ const FormQuestions = ({ event, modalHandler }: FormQuestionProp) => {
         <Button
           disabled={!isValid || isMutating}
           style={{ width: 120 }}
-          onClick={handleSubmit((data) => {
-            trigger(data).catch(
-              (
-                error: AxiosError<{
-                  errorCodeName: string;
-                  errorMessage: string;
-                }>
-              ) => {
+          onClick={handleSubmit(async (data) => {
+            await trigger(data, {
+              onError: (error) => {
                 if (
                   event?.regularRoleOnlyStatus === "ENABLED" &&
                   error?.response?.data.errorCodeName ===
                     "EVENT_NOT_APPLICABLE_NOT_REGULAR_ROLE"
                 ) {
-                  modalHandler();
+                  errorHandler(error?.response?.data.errorCodeName);
                 } else if (
                   error.response?.data.errorCodeName ===
                   "PARTICIPATION_DUPLICATE"
                 ) {
-                  modalHandler();
+                  errorHandler(error?.response?.data.errorCodeName);
                 }
-              }
-            );
+                throw error;
+              },
+            });
           })}
         >
           제출
