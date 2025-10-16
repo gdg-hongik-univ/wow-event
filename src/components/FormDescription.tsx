@@ -1,3 +1,4 @@
+import { useResponsive } from "../hooks/useResponsive";
 import Text from "./base/Text";
 
 interface FormDescriptionProp {
@@ -11,6 +12,8 @@ const FormDescription = ({
   venue,
   applicationDescription,
 }: FormDescriptionProp) => {
+  const { isMobile } = useResponsive();
+
   const startDate = new Date(startAt);
 
   const showDate = `${startDate.getFullYear()}년 ${
@@ -18,7 +21,7 @@ const FormDescription = ({
   }월 ${startDate.getDate()}일 ${startDate.getHours()}시 ${startDate.getMinutes()}분`;
 
   return (
-    <Text style={{ width: "100%" }}>
+    <Text style={{ width: "100%" }} typo={isMobile ? "body2" : "body1"}>
       {!isNaN(startDate.getTime()) && `행사 일시: ${showDate}`}
       <br />
       {venue && `행사 장소: ${venue}`}
