@@ -16,7 +16,7 @@ const ErrorMessages: Record<ErrorCodeType, string> = {
 
 const ErrorText = ({ errorCode }: ErrorTextProp) => {
   return (
-    <Text style={{ width: "min(988px,90%)" }} typo={"body1"}>
+    <Text style={{ width: "90%", textAlign: "center" }} typo={"body1"}>
       {ErrorMessages[errorCode]}
     </Text>
   );
