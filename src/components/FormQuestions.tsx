@@ -32,7 +32,13 @@ const FormQuestions = ({ event, errorHandler }: FormQuestionProp) => {
   const { trigger, isMutating } = useEventMutation();
 
   const isValid = {
-    personal: !!(name && studentId && phone),
+    personal: !!(
+      name &&
+      studentId &&
+      phone &&
+      /^[A-Z]\d{6}$/.test(studentId) &&
+      /^\d{11}$/.test(phone)
+    ),
     etc:
       (afterPartyApplicationStatus === "NONE" || afterPartyApplicationStatus) &&
       noticeConfirmed === "true",
@@ -61,12 +67,14 @@ const FormQuestions = ({ event, errorHandler }: FormQuestionProp) => {
               question="학번을 입력해주세요."
               required
               placeholder="Ex. C123456"
+              validation={/^[A-Z]\d{6}$/}
               register={register("participant.studentId")}
             />
             <ShortAnswer
               question="전화번호를 입력해주세요."
               required
               placeholder="Ex. 01012345678"
+              validation={/^\d{11}$/}
               register={register("participant.phone")}
             />
           </Flex>
