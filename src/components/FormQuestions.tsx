@@ -3,6 +3,7 @@ import { useFormContext } from "react-hook-form";
 
 import { color } from "wowds-tokens";
 import Button from "wowds-ui/Button";
+import { VALIDATION_PATTERNS } from "../constants/validation";
 import { useEventMutation } from "../hooks/useMutation";
 import { useResponsive } from "../hooks/useResponsive";
 import type { ErrorCodeType } from "../types/error";
@@ -36,8 +37,8 @@ const FormQuestions = ({ event, errorHandler }: FormQuestionProp) => {
       name &&
       studentId &&
       phone &&
-      /^[A-Z]\d{6}$/.test(studentId) &&
-      /^\d{11}$/.test(phone)
+      VALIDATION_PATTERNS.studentId.test(studentId) &&
+      VALIDATION_PATTERNS.phone.test(phone)
     ),
     etc:
       (afterPartyApplicationStatus === "NONE" || afterPartyApplicationStatus) &&
@@ -56,7 +57,7 @@ const FormQuestions = ({ event, errorHandler }: FormQuestionProp) => {
     switch (page) {
       case 0:
         return (
-          <Flex direction="column" gap={60} align="center">
+          <>
             <ShortAnswer
               question="이름을 입력해주세요."
               required
@@ -67,17 +68,17 @@ const FormQuestions = ({ event, errorHandler }: FormQuestionProp) => {
               question="학번을 입력해주세요."
               required
               placeholder="Ex. C123456"
-              validation={/^[A-Z]\d{6}$/}
+              validation={VALIDATION_PATTERNS.studentId}
               register={register("participant.studentId")}
             />
             <ShortAnswer
               question="전화번호를 입력해주세요."
               required
               placeholder="Ex. 01012345678"
-              validation={/^\d{11}$/}
+              validation={VALIDATION_PATTERNS.phone}
               register={register("participant.phone")}
             />
-          </Flex>
+          </>
         );
       case 1:
         return (
@@ -142,6 +143,7 @@ const FormQuestions = ({ event, errorHandler }: FormQuestionProp) => {
                 href="https://www.gdschongik.com/onboarding/no-show"
                 style={{ textDecorationLine: "underline" }}
                 target="_blank"
+                rel="noopener noreferrer"
               >
                 GDG 노쇼 규정
               </a>
