@@ -1,5 +1,5 @@
 {
-  "name": "wow-checkin",
+  "name": "wow-event",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -12,12 +12,12 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "@tailwindcss/vite": "^4.1.12",
+    "axios": "^1.12.1",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-hook-form": "^7.62.0",
     "react-router": "^7.8.2",
-    "tailwindcss": "^4.1.12",
+    "swr": "^2.3.6",
     "wowds-icons": "^0.1.6",
     "wowds-tokens": "^0.1.6",
     "wowds-ui": "^0.3.0"

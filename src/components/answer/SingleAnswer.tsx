@@ -2,29 +2,44 @@ import { useRef } from "react";
 import { color, typography } from "wowds-tokens";
 import RadioButton from "wowds-ui/RadioButton";
 import RadioGroup from "wowds-ui/RadioGroup";
+import Flex from "../base/Flex";
+import Text from "../base/Text";
 import BaseAnswer, { type BaseAnswerProps } from "./BaseAnswer";
-import Flex from "./Flex";
-import Text from "./Text";
 
 interface SingleAnswerProps extends BaseAnswerProps {
   options: string[];
+  optionValues?: string[];
+  value?: string;
   withEtc?: boolean;
+  onChange?: (value: any) => void;
 }
 
 const SingleAnswer = ({
   question,
+  optionValues,
+  value,
   required,
   options,
   withEtc = false,
+  onChange,
 }: SingleAnswerProps) => {
   const textInputRef = useRef<HTMLInputElement>(null);
   return (
     <BaseAnswer question={question} required={required}>
-      <RadioGroup defaultValue="">
-        {options.map((item) => (
+      <RadioGroup
+        defaultValue=""
+        onChange={
+          onChange &&
+          ((e) => {
+            onChange(e.target.value);
+          })
+        }
+        value={value}
+      >
+        {options.map((item, idx) => (
           <RadioButton
             key={`radio-${item}`}
-            value={item}
+            value={optionValues ? optionValues[idx] : item}
             style={{ marginBottom: "0.5rem" }}
             label={<Text typo="body1">{item}</Text>}
           />
@@ -43,9 +58,11 @@ const SingleAnswer = ({
                 {<Text typo="body1">기타:</Text>}
                 <input
                   ref={textInputRef}
-                  className="w-[840px] outline-none pointer-events-none"
                   style={{
                     ...typography.body1,
+                    width: 840,
+                    outlineStyle: "none",
+                    pointerEvents: "none",
                     borderBottom: "solid 1px",
                     borderColor: color.outline,
                   }}

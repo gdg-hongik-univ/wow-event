@@ -1,25 +1,25 @@
 import { color, typography } from "wowds-tokens";
 import BaseAnswer, { type BaseAnswerProps } from "./BaseAnswer";
 
-interface ShortAnswerProps extends BaseAnswerProps {
-  placeholder?: string;
-}
+type LongAnswerProps = BaseAnswerProps;
 
-const ShortAnswer = ({ question, required, placeholder }: ShortAnswerProps) => {
+const LongAnswer = ({ question, required }: LongAnswerProps) => {
   return (
     <BaseAnswer question={question} required={required}>
-      <input
-        className="w-[460px] outline-none"
+      <textarea
         style={{
           ...typography.body1,
+          width: "100%",
           borderBottom: "solid 1px",
           borderColor: color.outline,
           paddingBottom: "8px",
+          resize: "none",
+          outlineStyle: "none",
         }}
-        placeholder={placeholder || "답변을 입력해주세요."}
-      />
+        placeholder="답변을 입력해주세요."
+      ></textarea>
     </BaseAnswer>
   );
 };
 
-export default ShortAnswer;
+export default LongAnswer;

@@ -18,7 +18,12 @@ const Text = ({
 }: TextProps) => {
   return (
     <Tag
-      style={{ ...typoType[typo], color: colorType[color], ...style }}
+      style={{
+        ...typoType[typo],
+        color: colorType[color],
+        wordBreak: "keep-all",
+        ...style,
+      }}
       {...props}
     >
       {children}
