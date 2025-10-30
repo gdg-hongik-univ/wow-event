@@ -107,8 +107,20 @@ const FormQuestions = ({ event, errorHandler }: FormQuestionProp) => {
             )}
             {event.rsvpQuestionStatus === "ENABLED" && (
               <SingleAnswer
-                question="bevy 페이지에 가입하신 분은 RSVP를 등록해주세요."
-                options={["등록 완료했습니다."]}
+                question={
+                  <>
+                    <a
+                      href="https://gdg.community.dev/gdg-on-campus-hongik-university-seoul-south-korea/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ textDecorationLine: "underline" }}
+                    >
+                      bevy 페이지
+                    </a>
+                    에 가입하신 분은 RSVP를 등록해주세요.
+                  </>
+                }
+                options={["확인했습니다."]}
               />
             )}
           </>

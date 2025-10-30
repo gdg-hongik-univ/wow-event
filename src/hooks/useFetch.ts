@@ -6,7 +6,7 @@ import type { EventDtoType } from "../types/event";
 
 export const useEventFetcher = (eventId: string | undefined) => {
   const { data, error } = useSWR<EventDtoType, AxiosError<ErrorDataType>>(
-    eventId ? `/participant/events/${eventId}` : null,
+    eventId ? `/common/events/${eventId}` : null,
     fetcher,
     { errorRetryCount: 2, errorRetryInterval: 5000 }
   );
