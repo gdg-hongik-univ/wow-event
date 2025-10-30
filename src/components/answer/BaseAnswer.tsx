@@ -1,10 +1,10 @@
-import { type PropsWithChildren } from "react";
+import { type PropsWithChildren, type ReactNode } from "react";
 import { useResponsive } from "../../hooks/useResponsive";
 import Flex from "../base/Flex";
 import Text from "../base/Text";
 
 export interface BaseAnswerProps extends PropsWithChildren {
-  question: string;
+  question: string | ReactNode;
   required?: boolean;
 }
 
