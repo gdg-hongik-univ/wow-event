@@ -4,7 +4,12 @@ import useSWRMutation from "swr/mutation";
 import { eventUpdater } from "../apis/eventUpdater";
 import { fetcher } from "../apis/fetcher";
 import type { ErrorDataType } from "../types/error";
-import type { EventApplyDtoType, EventDtoType } from "../types/event";
+import type {
+  EventApplyDtoType,
+  EventDtoType,
+  ParticipantValidationDto,
+  ParticipantValidationResponse,
+} from "../types/event";
 
 export const useEvent = () => {
   const eventFetcher = (eventId: string | undefined) => {
@@ -16,6 +21,13 @@ export const useEvent = () => {
     return eventFetcher;
   };
 
+  const validationMutation = useSWRMutation<
+    ParticipantValidationResponse,
+    AxiosError<ErrorDataType>,
+    string,
+    ParticipantValidationDto
+  >("/participant/event-participations/validate-applicable", eventUpdater);
+
   const submitEventMutation = useSWRMutation<
     any,
     AxiosError<ErrorDataType>,
@@ -23,5 +35,5 @@ export const useEvent = () => {
     EventApplyDtoType
   >("/participant/event-participations/apply", eventUpdater);
 
-  return { eventFetcher, submitEventMutation };
+  return { eventFetcher, validationMutation, submitEventMutation };
 };
