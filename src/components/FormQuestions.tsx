@@ -4,7 +4,8 @@ import { useFormContext } from "react-hook-form";
 import { color } from "wowds-tokens";
 import Button from "wowds-ui/Button";
 import { VALIDATION_PATTERNS } from "../constants/validation";
-import { useEventMutation } from "../hooks/useMutation";
+
+import { useEvent } from "../hooks/useEvent";
 import { useResponsive } from "../hooks/useResponsive";
 import type { ErrorCodeType } from "../types/error";
 import type { EventApplyDtoType, EventDtoType } from "../types/event";
@@ -30,7 +31,13 @@ const FormQuestions = ({ event, errorHandler }: FormQuestionProp) => {
   const phone = watch("participant.phone");
   const afterPartyApplicationStatus = watch("afterPartyApplicationStatus");
 
-  const { trigger, isMutating } = useEventMutation();
+  const {
+    submitEventMutation: { trigger, isMutating },
+    validationMutation: {
+      trigger: validationTrigger,
+      isMutating: isValidating,
+    },
+  } = useEvent();
 
   const isValid = {
     personal: !!(
@@ -190,10 +197,36 @@ const FormQuestions = ({ event, errorHandler }: FormQuestionProp) => {
           event.prePaymentStatus === "ENABLED" &&
           pageNum === 1) ? (
           <Button
-            disabled={pageNum === 0 ? !isValid.personal : !isValid.etc}
+            disabled={
+              pageNum === 0 ? !isValid.personal || isValidating : !isValid.etc
+            }
             style={isMobile ? { width: 80, height: 40 } : { width: 120 }}
-            onClick={() => {
-              setPageNum((prev) => (prev += 1));
+            onClick={async () => {
+              if (pageNum === 0) {
+                const eventId = watch("eventId");
+                try {
+                  const result = await validationTrigger({
+                    eventId,
+                    participant: {
+                      name,
+                      studentId,
+                      phone,
+                    },
+                  });
+
+                  if (result?.isParticipable) {
+                    setPageNum((prev) => (prev += 1));
+                  } else if (result?.errorCodeName) {
+                    errorHandler(result.errorCodeName as ErrorCodeType);
+                  }
+                } catch (error: any) {
+                  if (error?.response?.data?.errorCodeName) {
+                    errorHandler(error.response.data.errorCodeName);
+                  }
+                }
+              } else {
+                setPageNum((prev) => (prev += 1));
+              }
             }}
           >
             다음
