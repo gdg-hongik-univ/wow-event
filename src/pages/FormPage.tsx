@@ -4,7 +4,6 @@ import { useParams } from "react-router";
 import Flex from "../components/base/Flex";
 import Text from "../components/base/Text";
 import ErrorModal from "../components/ErrorModal";
-import ErrorText from "../components/ErrorText";
 import FormDescription from "../components/FormDescription";
 import FormQuestions from "../components/FormQuestions";
 import FormTitle from "../components/FormTitle";
@@ -21,7 +20,7 @@ const FormPage = () => {
 
   const { eventFetcher } = useEvent();
 
-  const { data: eventData, error: fetchError } = eventFetcher(eventId);
+  const { data: eventData } = eventFetcher(eventId);
   const {
     watch,
     setValue,
@@ -42,16 +41,7 @@ const FormPage = () => {
       setValue("afterPartyApplicationStatus", "NONE");
   }, [eventData, watchedEventId]);
 
-  return fetchError?.response?.data.errorCodeName ? (
-    <Flex
-      direction="column"
-      justify="center"
-      align="center"
-      style={{ paddingTop: 100 }}
-    >
-      <ErrorText errorCode={fetchError.response.data.errorCodeName} />
-    </Flex>
-  ) : (
+  return (
     eventData && (
       <Flex justify="center">
         {errorModalStatus === "EVENT_NOT_APPLICABLE_NOT_REGULAR_ROLE" && (

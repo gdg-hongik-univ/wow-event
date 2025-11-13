@@ -4,8 +4,3 @@ export type ErrorCodeType =
   | "PARTICIPATION_DUPLICATE"
   | "EVENT_NOT_APPLICABLE_NOT_REGULAR_ROLE"
   | "EVENT_NOT_FOUND";
-
-export interface ErrorDataType {
-  errorCodeName: ErrorCodeType;
-  errorMessage: string;
-}

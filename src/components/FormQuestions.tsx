@@ -238,18 +238,6 @@ const FormQuestions = ({ event, errorHandler }: FormQuestionProp) => {
             onClick={handleSubmit(async (data) => {
               await trigger(data, {
                 onError: (error) => {
-                  if (
-                    event?.regularRoleOnlyStatus === "ENABLED" &&
-                    error?.response?.data.errorCodeName ===
-                      "EVENT_NOT_APPLICABLE_NOT_REGULAR_ROLE"
-                  ) {
-                    errorHandler(error?.response?.data.errorCodeName);
-                  } else if (
-                    error.response?.data.errorCodeName ===
-                    "PARTICIPATION_DUPLICATE"
-                  ) {
-                    errorHandler(error?.response?.data.errorCodeName);
-                  }
                   throw error;
                 },
               });
