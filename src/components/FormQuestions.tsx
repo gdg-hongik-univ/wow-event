@@ -5,7 +5,7 @@ import { color } from "wowds-tokens";
 import Button from "wowds-ui/Button";
 import { VALIDATION_PATTERNS } from "../constants/validation";
 
-import { useEvent } from "../hooks/useEvent";
+import { useEventMutation } from "../hooks/useEvent";
 import { useResponsive } from "../hooks/useResponsive";
 import type { ErrorCodeType } from "../types/error";
 import type { EventApplyDtoType, EventDtoType } from "../types/event";
@@ -37,7 +37,7 @@ const FormQuestions = ({ event, errorHandler }: FormQuestionProp) => {
       trigger: validationTrigger,
       isMutating: isValidating,
     },
-  } = useEvent();
+  } = useEventMutation();
 
   const isValid = {
     personal: !!(

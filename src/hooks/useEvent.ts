@@ -10,16 +10,17 @@ import type {
   ParticipantValidationResponse,
 } from "../types/event";
 
-export const useEvent = () => {
-  const eventFetcher = (eventId: string | undefined) => {
-    const eventFetcher = useSWR<EventDtoType, AxiosError>(
-      eventId ? `/common/events/${eventId}` : null,
-      fetcher,
-      { errorRetryCount: 2, errorRetryInterval: 5000 }
-    );
-    return eventFetcher;
-  };
+export const useEvent = (eventId?: string) => {
+  const { data, error } = useSWR<EventDtoType, AxiosError>(
+    eventId ? `/common/events/${eventId}` : null,
+    fetcher,
+    { errorRetryCount: 2, errorRetryInterval: 5000 }
+  );
 
+  return { data, error };
+};
+
+export const useEventMutation = () => {
   const validationMutation = useSWRMutation<
     ParticipantValidationResponse,
     AxiosError,
@@ -34,5 +35,5 @@ export const useEvent = () => {
     EventApplyDtoType
   >("/participant/event-participations/apply", eventUpdater);
 
-  return { eventFetcher, validationMutation, submitEventMutation };
+  return { validationMutation, submitEventMutation };
 };
