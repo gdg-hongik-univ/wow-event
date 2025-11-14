@@ -29,7 +29,7 @@ export const useEventMutation = () => {
   >("/participant/event-participations/validate-applicable", eventUpdater);
 
   const submitEventMutation = useSWRMutation<
-    any,
+    void,
     AxiosError,
     string,
     EventApplyDtoType

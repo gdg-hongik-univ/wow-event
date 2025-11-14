@@ -5,6 +5,7 @@ import { color } from "wowds-tokens";
 import Button from "wowds-ui/Button";
 import { VALIDATION_PATTERNS } from "../constants/validation";
 
+import type { AxiosError } from "axios";
 import { useEventMutation } from "../hooks/useEvent";
 import { useResponsive } from "../hooks/useResponsive";
 import type { ErrorCodeType } from "../types/error";
@@ -219,13 +220,12 @@ const FormQuestions = ({ event, errorHandler }: FormQuestionProp) => {
                   } else if (result?.errorCodeName) {
                     errorHandler(result.errorCodeName as ErrorCodeType);
                   }
-                } catch (error: any) {
-                  if (error?.response?.data?.errorCodeName) {
-                    errorHandler(error.response.data.errorCodeName);
+                } catch (error) {
+                  if (error instanceof Error && "response" in error) {
+                    const axiosError = error as AxiosError;
+                    throw axiosError;
                   }
                 }
-              } else {
-                setPageNum((prev) => (prev += 1));
               }
             }}
           >
