@@ -67,7 +67,7 @@ const FormPage = () => {
               <FormDescription
                 startAt={eventData.startAt}
                 venue={eventData.venue}
-                applicationDescription={eventData.applicationDescription}
+                description={eventData.description}
               />
               <FormQuestions
                 event={eventData}
