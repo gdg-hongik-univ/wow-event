@@ -4,13 +4,13 @@ import Text from "./base/Text";
 interface FormDescriptionProp {
   venue: string;
   startAt: string;
-  applicationDescription: string;
+  description: string;
 }
 
 const FormDescription = ({
   startAt,
   venue,
-  applicationDescription,
+  description,
 }: FormDescriptionProp) => {
   const { isMobile } = useResponsive();
 
@@ -27,7 +27,7 @@ const FormDescription = ({
       {venue && `행사 장소: ${venue}`}
       <br />
       <br />
-      {applicationDescription}
+      {description}
     </Text>
   );
 };

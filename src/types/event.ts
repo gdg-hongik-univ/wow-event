@@ -12,7 +12,7 @@ export interface EventDtoType {
   name: string;
   venue: string;
   startAt: string;
-  applicationDescription: string;
+  description: string;
   applicationPeriod: {
     startDate: string;
     endDate: string;
