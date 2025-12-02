@@ -12,7 +12,7 @@ import type {
 
 export const useEvent = (eventId?: string) => {
   const { data, error } = useSWR<EventDtoType, AxiosError>(
-    eventId ? `/common/events/${eventId}` : null,
+    eventId ? `/participant/events/${eventId}` : null,
     fetcher,
     { errorRetryCount: 2, errorRetryInterval: 5000 }
   );
