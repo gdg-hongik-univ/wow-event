@@ -5,6 +5,7 @@ import { color } from "wowds-tokens";
 import Button from "wowds-ui/Button";
 import { VALIDATION_PATTERNS } from "../constants/validation";
 
+import type { AxiosError } from "axios";
 import { useEventMutation } from "../hooks/useEvent";
 import { useResponsive } from "../hooks/useResponsive";
 import type { ErrorCodeType } from "../types/error";
@@ -76,7 +77,6 @@ const FormQuestions = ({ event, errorHandler }: FormQuestionProp) => {
               required
               placeholder="Ex. C123456"
               validation={VALIDATION_PATTERNS.studentId}
-              errorMsg="C123456의 형식으로 입력해주세요."
               register={register("participant.studentId")}
             />
             <ShortAnswer
@@ -84,7 +84,6 @@ const FormQuestions = ({ event, errorHandler }: FormQuestionProp) => {
               required
               placeholder="Ex. 01012345678"
               validation={VALIDATION_PATTERNS.phone}
-              errorMsg="01012345678의 형식으로 입력해주세요."
               register={register("participant.phone")}
             />
           </>
@@ -204,7 +203,28 @@ const FormQuestions = ({ event, errorHandler }: FormQuestionProp) => {
             }
             style={isMobile ? { width: 80, height: 40 } : { width: 120 }}
             onClick={async () => {
-              setPageNum((prev) => (prev += 1));
+              const eventId = watch("eventId");
+              try {
+                const result = await validationTrigger({
+                  eventId,
+                  participant: {
+                    name,
+                    studentId,
+                    phone,
+                  },
+                });
+
+                if (result?.isParticipable) {
+                  setPageNum((prev) => (prev += 1));
+                } else if (result?.errorCodeName) {
+                  errorHandler(result.errorCodeName as ErrorCodeType);
+                }
+              } catch (error) {
+                if (error instanceof Error && "response" in error) {
+                  const axiosError = error as AxiosError;
+                  throw axiosError;
+                }
+              }
             }}
           >
             다음
