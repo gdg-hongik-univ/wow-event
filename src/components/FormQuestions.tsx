@@ -203,28 +203,26 @@ const FormQuestions = ({ event, errorHandler }: FormQuestionProp) => {
             }
             style={isMobile ? { width: 80, height: 40 } : { width: 120 }}
             onClick={async () => {
-              if (pageNum === 0) {
-                const eventId = watch("eventId");
-                try {
-                  const result = await validationTrigger({
-                    eventId,
-                    participant: {
-                      name,
-                      studentId,
-                      phone,
-                    },
-                  });
+              const eventId = watch("eventId");
+              try {
+                const result = await validationTrigger({
+                  eventId,
+                  participant: {
+                    name,
+                    studentId,
+                    phone,
+                  },
+                });
 
-                  if (result?.isParticipable) {
-                    setPageNum((prev) => (prev += 1));
-                  } else if (result?.errorCodeName) {
-                    errorHandler(result.errorCodeName as ErrorCodeType);
-                  }
-                } catch (error) {
-                  if (error instanceof Error && "response" in error) {
-                    const axiosError = error as AxiosError;
-                    throw axiosError;
-                  }
+                if (result?.isParticipable) {
+                  setPageNum((prev) => (prev += 1));
+                } else if (result?.errorCodeName) {
+                  errorHandler(result.errorCodeName as ErrorCodeType);
+                }
+              } catch (error) {
+                if (error instanceof Error && "response" in error) {
+                  const axiosError = error as AxiosError;
+                  throw axiosError;
                 }
               }
             }}

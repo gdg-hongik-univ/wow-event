@@ -8,6 +8,7 @@ interface ShortAnswerProps extends BaseAnswerProps {
   placeholder?: string;
   register: UseFormRegisterReturn;
   validation?: RegExp;
+  errorMsg?: string;
 }
 
 const ShortAnswer = ({
@@ -16,6 +17,7 @@ const ShortAnswer = ({
   placeholder,
   register,
   validation,
+  errorMsg,
 }: ShortAnswerProps) => {
   const [error, setError] = useState(false);
 
@@ -48,7 +50,7 @@ const ShortAnswer = ({
         />
         {error && (
           <Text typo="body3" color="error" style={{ marginTop: 4 }}>
-            양식을 확인해주세요
+            {errorMsg}
           </Text>
         )}
       </div>
