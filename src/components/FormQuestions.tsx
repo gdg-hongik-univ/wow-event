@@ -76,6 +76,7 @@ const FormQuestions = ({ event, errorHandler }: FormQuestionProp) => {
               required
               placeholder="Ex. C123456"
               validation={VALIDATION_PATTERNS.studentId}
+              errorMsg="C123456의 형식으로 입력해주세요."
               register={register("participant.studentId")}
             />
             <ShortAnswer
@@ -83,6 +84,7 @@ const FormQuestions = ({ event, errorHandler }: FormQuestionProp) => {
               required
               placeholder="Ex. 01012345678"
               validation={VALIDATION_PATTERNS.phone}
+              errorMsg="01012345678의 형식으로 입력해주세요."
               register={register("participant.phone")}
             />
           </>
