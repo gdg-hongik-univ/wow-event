@@ -22,8 +22,7 @@ const FormDescription = ({
 
   return (
     <Text
-      as={"pre"}
-      style={{ width: "100%" }}
+      style={{ width: "100%", whiteSpace: "break-spaces" }}
       typo={isMobile ? "body2" : "body1"}
     >
       {!isNaN(startDate.getTime()) && `행사 일시: ${showDate}`}
