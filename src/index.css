@@ -1,24 +1,52 @@
 @import "wowds-ui/styles.css";
+@import url("../src/styles/fonts.css");
 
-body{
-    background-color: #EBF4FE;
-    padding-top: 160px;
-    padding-bottom: 160px;
+h1 {
+  font-family: SUIT;
+  font-weight: 800;
+  font-size: 30px;
 }
-.wrapper{
-        gap:120px;
-    }
-
-
-@media(max-width:768px){
-    body{
-        padding-top: 0px;
-        padding-bottom: 55px;
+h2 {
+  font-family: SUIT;
+  font-weight: 700;
+  font-size: 24px;
 }
-    .wrapper{
-        gap:28px;
-    }
-    .title{
-        background-color: #ffffff;
-    }
+h3 {
+  font-family: SUIT;
+  font-weight: 600;
+  font-size: 20px;
+}
+h4 {
+  font-family: SUIT;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+body {
+  background-color: #ebf4fe;
+  padding-top: 160px;
+  padding-bottom: 160px;
+  font-family: SUIT;
+}
+.wrapper {
+  gap: 120px;
+}
+
+@media (max-width: 768px) {
+  body {
+    padding-top: 0px;
+    padding-bottom: 55px;
+  }
+  .wrapper {
+    gap: 28px;
+  }
+  .title {
+    background-color: #ffffff;
+  }
+  h1,
+  h2,
+  h3 {
+    font-weight: 700;
+    font-size: inherit;
+  }
 }
