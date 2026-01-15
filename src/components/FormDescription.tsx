@@ -50,6 +50,7 @@ const FormDescription = ({
             borderRadius: 8,
           }}
           typo={isMobile ? "body2" : "body1"}
+          as="div"
         >
           <ReactMarkdown>{description}</ReactMarkdown>
         </Text>

@@ -2,6 +2,7 @@ import { type PropsWithChildren, type ReactNode } from "react";
 import { useResponsive } from "../../hooks/useResponsive";
 import Flex from "../base/Flex";
 import Text from "../base/Text";
+import { color } from "wowds-tokens";
 
 export interface BaseAnswerProps extends PropsWithChildren {
   question: string | ReactNode;
@@ -18,6 +19,9 @@ const BaseAnswer = ({ question, required, children }: BaseAnswerProps) => {
       gap="lg"
       radius="xs"
       bgColor="backgroundNormal"
+      style={{
+        border: `1px solid ${color.primary}`,
+      }}
     >
       <Flex direction="column">
         <Flex gap="sm">

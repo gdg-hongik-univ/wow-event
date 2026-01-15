@@ -180,7 +180,7 @@ const FormQuestions = ({ event, errorHandler }: FormQuestionProp) => {
   };
 
   return (
-    <Flex direction="column" gap={60} align="center">
+    <Flex direction="column" gap={40} align="center">
       {questionPagination(pageNum)}
       <Flex gap={"lg"}>
         {pageNum > 0 && (
