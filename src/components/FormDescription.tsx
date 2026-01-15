@@ -35,6 +35,7 @@ const FormDescription = ({
             fontWeight: "700",
           }}
           typo={isMobile ? "body2" : "body1"}
+          as="div"
         >
           {!isNaN(startDate.getTime()) && `행사 일시: ${showDate}`}
           <br />
