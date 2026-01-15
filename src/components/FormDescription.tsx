@@ -22,7 +22,6 @@ const FormDescription = ({
     startDate.getMonth() + 1
   }월 ${startDate.getDate()}일 ${startDate.getHours()}시 ${startDate.getMinutes()}분`;
 
-  console.log(description);
   return (
     <>
       <Flex direction="column" gap={16} width="100%">

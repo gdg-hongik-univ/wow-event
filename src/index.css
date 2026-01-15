@@ -1,5 +1,5 @@
 @import "wowds-ui/styles.css";
-@import url("../src/styles/fonts.css");
+@import url("./styles/fonts.css");
 
 h1 {
   font-family: SUIT;
