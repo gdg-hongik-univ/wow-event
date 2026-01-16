@@ -62,7 +62,7 @@ const FormPage = () => {
               direction="column"
               align="center"
               width={"min(988px, 90%)"}
-              gap={isMobile ? 28 : 120}
+              gap={isMobile ? 50 : 60}
             >
               <FormDescription
                 startAt={eventData.startAt}
