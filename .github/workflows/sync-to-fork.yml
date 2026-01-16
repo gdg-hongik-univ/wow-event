@@ -1,0 +1,33 @@
+name: Synchronize to forked repo
+
+on:
+  push:
+    branches: [main, dev]
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure git identity
+        run: |
+          git config user.name "wawoo-dev"
+          git config user.email "wawoo-dev@users.noreply.github.com"
+
+      - name: Add fork remote
+        run: |
+          git remote add forked-repo https://wawoo-dev:${{ secrets.FORKED_REPO_TOKEN }}@github.com/wawoo-dev/wow-event.git
+
+      - name: Force sync branch to fork
+        run: |
+          git push -f forked-repo HEAD:${GITHUB_REF_NAME}
+
+      - name: Clean up
+        if: always()
+        run: |
+          git remote remove forked-repo
