@@ -1,3 +1,4 @@
+import remarkGfm from "remark-gfm";
 import { useResponsive } from "../hooks/useResponsive";
 import Flex from "./base/Flex";
 import Text from "./base/Text";
@@ -52,7 +53,11 @@ const FormDescription = ({
           typo={isMobile ? "body2" : "body1"}
           as="div"
         >
-          <ReactMarkdown>{description}</ReactMarkdown>
+          <div className="markdown">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {description}
+            </ReactMarkdown>
+          </div>
         </Text>
       </Flex>
     </>
