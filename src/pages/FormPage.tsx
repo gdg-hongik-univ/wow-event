@@ -38,6 +38,7 @@ const FormPage = () => {
       setErrorModalStatus("EVENT_NOT_APPLICABLE_OUTSIDE_APPLICATION_PERIOD");
     if (eventData?.afterPartyStatus === "DISABLED")
       setValue("afterPartyApplicationStatus", "NONE");
+    if (eventData) document.title = `와우이벤트 | ${eventData?.name}`;
   }, [eventData, watchedEventId]);
 
   return (
