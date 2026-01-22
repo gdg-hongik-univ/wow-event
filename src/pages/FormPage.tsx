@@ -18,7 +18,9 @@ const FormPage = () => {
   const { isMobile } = useResponsive();
   const { eventId } = useParams();
 
-  const { data: eventData } = useEvent(eventId);
+  const { data } = useEvent(eventId);
+
+  const eventData = data?.event;
 
   const {
     watch,

@@ -9,14 +9,14 @@ import type { AxiosError } from "axios";
 import { useEventMutation } from "../hooks/useEvent";
 import { useResponsive } from "../hooks/useResponsive";
 import type { ErrorCodeType } from "../types/error";
-import type { EventApplyDtoType, EventDtoType } from "../types/event";
+import type { EventApplyDtoType, EventResponseDtoType } from "../types/event";
 import ShortAnswer from "./answer/ShortAnswer";
 import SingleAnswer from "./answer/SingleAnswer";
 import Flex from "./base/Flex";
 import Text from "./base/Text";
 
 interface FormQuestionProp {
-  event: EventDtoType;
+  event: EventResponseDtoType;
   errorHandler: (errorCode: ErrorCodeType) => void;
 }
 
@@ -55,8 +55,8 @@ const FormQuestions = ({ event, errorHandler }: FormQuestionProp) => {
 
   useEffect(() => {
     if (
-      event?.noticeConfirmQuestionStatus === "DISABLED" ||
-      !event?.noticeConfirmQuestionStatus
+      event?.event.noticeConfirmQuestionStatus === "DISABLED" ||
+      !event?.event.noticeConfirmQuestionStatus
     )
       setNoticeConfirmed("true");
   }, [event, afterPartyApplicationStatus]);
@@ -93,7 +93,7 @@ const FormQuestions = ({ event, errorHandler }: FormQuestionProp) => {
       case 1:
         return (
           <>
-            {event.noticeConfirmQuestionStatus === "ENABLED" && (
+            {event.event.noticeConfirmQuestionStatus === "ENABLED" && (
               <SingleAnswer
                 question="유의사항을 확인하셨나요?"
                 options={["예, 확인했습니다."]}
@@ -115,7 +115,7 @@ const FormQuestions = ({ event, errorHandler }: FormQuestionProp) => {
                 required
               />
             )}
-            {event.rsvpQuestionStatus === "ENABLED" && (
+            {event.event.rsvpQuestionStatus === "ENABLED" && (
               <SingleAnswer
                 question={
                   <>
@@ -192,12 +192,12 @@ const FormQuestions = ({ event, errorHandler }: FormQuestionProp) => {
             이전
           </Button>
         )}
-        {((event.noticeConfirmQuestionStatus === "ENABLED" ||
+        {((event.event.noticeConfirmQuestionStatus === "ENABLED" ||
           afterPartyApplicationStatus !== "NONE" ||
-          event.rsvpQuestionStatus === "ENABLED") &&
+          event.event.rsvpQuestionStatus === "ENABLED") &&
           pageNum === 0) ||
         (afterPartyApplicationStatus === "APPLIED" &&
-          event.prePaymentStatus === "ENABLED" &&
+          event.event.prePaymentStatus === "ENABLED" &&
           pageNum === 1) ? (
           <Button
             disabled={
