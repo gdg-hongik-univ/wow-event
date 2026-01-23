@@ -1,5 +1,6 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
 import { color } from "wowds-tokens";
 import { useResponsive } from "../hooks/useResponsive";
 import type { EventResponseDtoType } from "../types/event";
@@ -14,6 +15,8 @@ const FormDescription = ({ eventData }: FormDescriptionProp) => {
   const { isMobile } = useResponsive();
 
   const startDate = new Date(eventData.event.startAt);
+
+  const parseUnderline = (md: string) => md.replace(/__(.+?)__/g, "<u>$1</u>");
 
   const showDate = `${startDate.getFullYear()}년 ${
     startDate.getMonth() + 1
@@ -50,8 +53,11 @@ const FormDescription = ({ eventData }: FormDescriptionProp) => {
           as="div"
         >
           <div className="markdown">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {eventData.event.description}
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[rehypeRaw]}
+            >
+              {parseUnderline(eventData.event.description)}
             </ReactMarkdown>
           </div>
         </Text>
