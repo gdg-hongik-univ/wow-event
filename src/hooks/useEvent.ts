@@ -5,16 +5,16 @@ import { eventUpdater } from "../apis/eventUpdater";
 import { fetcher } from "../apis/fetcher";
 import type {
   EventApplyDtoType,
-  EventDtoType,
+  EventResponseDtoType,
   ParticipantValidationDto,
   ParticipantValidationResponse,
 } from "../types/event";
 
 export const useEvent = (eventId?: string) => {
-  const { data, error } = useSWR<EventDtoType, AxiosError>(
+  const { data, error } = useSWR<EventResponseDtoType, AxiosError>(
     eventId ? `/participant/events/${eventId}` : null,
     fetcher,
-    { errorRetryCount: 2, errorRetryInterval: 5000 }
+    { errorRetryCount: 2, errorRetryInterval: 5000 },
   );
 
   return { data, error };

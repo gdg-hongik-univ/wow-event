@@ -7,7 +7,6 @@ import ErrorModal from "../components/ErrorModal";
 import FormDescription from "../components/FormDescription";
 import FormQuestions from "../components/FormQuestions";
 import FormTitle from "../components/FormTitle";
-
 import { ERROR_MESSAGES } from "../constants/error";
 import { useEvent } from "../hooks/useEvent";
 import { useResponsive } from "../hooks/useResponsive";
@@ -33,12 +32,15 @@ const FormPage = () => {
 
   useEffect(() => {
     if (watchedEventId === undefined && eventData)
-      setValue("eventId", eventData.eventId);
-    if (eventData && new Date(eventData.applicationPeriod.endDate) < new Date())
+      setValue("eventId", eventData.event.eventId);
+    if (
+      eventData &&
+      new Date(eventData.event.applicationPeriod.endDate) < new Date()
+    )
       setErrorModalStatus("EVENT_NOT_APPLICABLE_OUTSIDE_APPLICATION_PERIOD");
-    if (eventData?.afterPartyStatus === "DISABLED")
+    if (eventData?.event.afterPartyStatus === "DISABLED")
       setValue("afterPartyApplicationStatus", "NONE");
-    if (eventData) document.title = `와우이벤트 | ${eventData?.name}`;
+    if (eventData) document.title = `와우이벤트 | ${eventData?.event.name}`;
   }, [eventData, watchedEventId]);
 
   return (
@@ -48,7 +50,7 @@ const FormPage = () => {
           <ErrorModal onClose={() => setErrorModalStatus(undefined)} />
         )}
         <Flex direction="column" align="center" gap={isMobile ? 20 : 40}>
-          <FormTitle title={eventData.name} />
+          <FormTitle title={eventData.event.name} />
           {errorModalStatus &&
           errorModalStatus !== "EVENT_NOT_APPLICABLE_NOT_REGULAR_ROLE" ? (
             <Text style={{ width: "min(988px,90%)" }}>
@@ -63,13 +65,9 @@ const FormPage = () => {
               direction="column"
               align="center"
               width={"min(988px, 90%)"}
-              gap={isMobile ? 50 : 60}
+              gap={isMobile ? 12 : 18}
             >
-              <FormDescription
-                startAt={eventData.startAt}
-                venue={eventData.venue}
-                description={eventData.description}
-              />
+              <FormDescription eventData={eventData} />
               <FormQuestions
                 event={eventData}
                 errorHandler={(errorCode: ErrorCodeType) => {

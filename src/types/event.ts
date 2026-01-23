@@ -7,7 +7,7 @@ export interface ParticipantValidationDto {
   eventId: number;
   participant: Participant;
 }
-export interface EventDtoType {
+export interface EventType {
   eventId: number;
   name: string;
   venue: string;
@@ -25,6 +25,13 @@ export interface EventDtoType {
   noticeConfirmQuestionStatus: QuestionStatus;
   mainEventMaxApplicantCount: number;
   afterPartyMaxApplicantCount: number;
+}
+
+export interface EventResponseDtoType {
+  event: EventType;
+  mainEventCurrentApplicantCount: number;
+  afterPartyCurrentApplicantCount: number;
+  eventStatus: string;
 }
 
 export interface EventApplyDtoType {
