@@ -4,17 +4,19 @@ import { useFormContext } from "react-hook-form";
 import { color } from "wowds-tokens";
 import Button from "wowds-ui/Button";
 import { VALIDATION_PATTERNS } from "../constants/validation";
-import { useEventMutation } from "../hooks/useMutation";
+
+import type { AxiosError } from "axios";
+import { useEventMutation } from "../hooks/useEvent";
 import { useResponsive } from "../hooks/useResponsive";
 import type { ErrorCodeType } from "../types/error";
-import type { EventApplyDtoType, EventDtoType } from "../types/event";
+import type { EventApplyDtoType, EventResponseDtoType } from "../types/event";
 import ShortAnswer from "./answer/ShortAnswer";
 import SingleAnswer from "./answer/SingleAnswer";
 import Flex from "./base/Flex";
 import Text from "./base/Text";
 
 interface FormQuestionProp {
-  event: EventDtoType;
+  event: EventResponseDtoType;
   errorHandler: (errorCode: ErrorCodeType) => void;
 }
 
@@ -30,7 +32,13 @@ const FormQuestions = ({ event, errorHandler }: FormQuestionProp) => {
   const phone = watch("participant.phone");
   const afterPartyApplicationStatus = watch("afterPartyApplicationStatus");
 
-  const { trigger, isMutating } = useEventMutation();
+  const {
+    submitEventMutation: { trigger, isMutating },
+    validationMutation: {
+      trigger: validationTrigger,
+      isMutating: isValidating,
+    },
+  } = useEventMutation();
 
   const isValid = {
     personal: !!(
@@ -47,8 +55,8 @@ const FormQuestions = ({ event, errorHandler }: FormQuestionProp) => {
 
   useEffect(() => {
     if (
-      event?.noticeConfirmQuestionStatus === "DISABLED" ||
-      !event?.noticeConfirmQuestionStatus
+      event?.event.noticeConfirmQuestionStatus === "DISABLED" ||
+      !event?.event.noticeConfirmQuestionStatus
     )
       setNoticeConfirmed("true");
   }, [event, afterPartyApplicationStatus]);
@@ -68,6 +76,7 @@ const FormQuestions = ({ event, errorHandler }: FormQuestionProp) => {
               question="학번을 입력해주세요."
               required
               placeholder="Ex. C123456"
+              errorMsg="C123456의 형식으로 입력해주세요."
               validation={VALIDATION_PATTERNS.studentId}
               register={register("participant.studentId")}
             />
@@ -75,6 +84,7 @@ const FormQuestions = ({ event, errorHandler }: FormQuestionProp) => {
               question="전화번호를 입력해주세요."
               required
               placeholder="Ex. 01012345678"
+              errorMsg="01012345678의 형식으로 입력해주세요."
               validation={VALIDATION_PATTERNS.phone}
               register={register("participant.phone")}
             />
@@ -83,7 +93,7 @@ const FormQuestions = ({ event, errorHandler }: FormQuestionProp) => {
       case 1:
         return (
           <>
-            {event.noticeConfirmQuestionStatus === "ENABLED" && (
+            {event.event.noticeConfirmQuestionStatus === "ENABLED" && (
               <SingleAnswer
                 question="유의사항을 확인하셨나요?"
                 options={["예, 확인했습니다."]}
@@ -105,10 +115,22 @@ const FormQuestions = ({ event, errorHandler }: FormQuestionProp) => {
                 required
               />
             )}
-            {event.rsvpQuestionStatus === "ENABLED" && (
+            {event.event.rsvpQuestionStatus === "ENABLED" && (
               <SingleAnswer
-                question="bevy 페이지에 가입하신 분은 RSVP를 등록해주세요."
-                options={["등록 완료했습니다."]}
+                question={
+                  <>
+                    <a
+                      href="https://gdg.community.dev/gdg-on-campus-hongik-university-seoul-south-korea/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ textDecorationLine: "underline" }}
+                    >
+                      bevy 페이지
+                    </a>
+                    에 가입하신 분은 RSVP를 등록해주세요.
+                  </>
+                }
+                options={["확인했습니다."]}
               />
             )}
           </>
@@ -158,7 +180,7 @@ const FormQuestions = ({ event, errorHandler }: FormQuestionProp) => {
   };
 
   return (
-    <Flex direction="column" gap={60} align="center">
+    <Flex direction="column" gap={40} align="center">
       {questionPagination(pageNum)}
       <Flex gap={"lg"}>
         {pageNum > 0 && (
@@ -170,18 +192,41 @@ const FormQuestions = ({ event, errorHandler }: FormQuestionProp) => {
             이전
           </Button>
         )}
-        {((event.noticeConfirmQuestionStatus === "ENABLED" ||
+        {((event.event.noticeConfirmQuestionStatus === "ENABLED" ||
           afterPartyApplicationStatus !== "NONE" ||
-          event.rsvpQuestionStatus === "ENABLED") &&
+          event.event.rsvpQuestionStatus === "ENABLED") &&
           pageNum === 0) ||
         (afterPartyApplicationStatus === "APPLIED" &&
-          event.prePaymentStatus === "ENABLED" &&
+          event.event.prePaymentStatus === "ENABLED" &&
           pageNum === 1) ? (
           <Button
-            disabled={pageNum === 0 ? !isValid.personal : !isValid.etc}
+            disabled={
+              pageNum === 0 ? !isValid.personal || isValidating : !isValid.etc
+            }
             style={isMobile ? { width: 80, height: 40 } : { width: 120 }}
-            onClick={() => {
-              setPageNum((prev) => (prev += 1));
+            onClick={async () => {
+              const eventId = watch("eventId");
+              try {
+                const result = await validationTrigger({
+                  eventId,
+                  participant: {
+                    name,
+                    studentId,
+                    phone,
+                  },
+                });
+
+                if (result?.isParticipable) {
+                  setPageNum((prev) => (prev += 1));
+                } else if (result?.errorCodeName) {
+                  errorHandler(result.errorCodeName as ErrorCodeType);
+                }
+              } catch (error) {
+                if (error instanceof Error && "response" in error) {
+                  const axiosError = error as AxiosError;
+                  throw axiosError;
+                }
+              }
             }}
           >
             다음
@@ -193,18 +238,6 @@ const FormQuestions = ({ event, errorHandler }: FormQuestionProp) => {
             onClick={handleSubmit(async (data) => {
               await trigger(data, {
                 onError: (error) => {
-                  if (
-                    event?.regularRoleOnlyStatus === "ENABLED" &&
-                    error?.response?.data.errorCodeName ===
-                      "EVENT_NOT_APPLICABLE_NOT_REGULAR_ROLE"
-                  ) {
-                    errorHandler(error?.response?.data.errorCodeName);
-                  } else if (
-                    error.response?.data.errorCodeName ===
-                    "PARTICIPATION_DUPLICATE"
-                  ) {
-                    errorHandler(error?.response?.data.errorCodeName);
-                  }
                   throw error;
                 },
               });

@@ -4,11 +4,11 @@ import { useParams } from "react-router";
 import Flex from "../components/base/Flex";
 import Text from "../components/base/Text";
 import ErrorModal from "../components/ErrorModal";
-import ErrorText from "../components/ErrorText";
 import FormDescription from "../components/FormDescription";
 import FormQuestions from "../components/FormQuestions";
 import FormTitle from "../components/FormTitle";
-import { useEventFetcher } from "../hooks/useFetch";
+import { ERROR_MESSAGES } from "../constants/error";
+import { useEvent } from "../hooks/useEvent";
 import { useResponsive } from "../hooks/useResponsive";
 import type { ErrorCodeType } from "../types/error";
 import type { EventApplyDtoType } from "../types/event";
@@ -17,7 +17,8 @@ const FormPage = () => {
   const { isMobile } = useResponsive();
   const { eventId } = useParams();
 
-  const { data: eventData, error: fetchError } = useEventFetcher(eventId);
+  const { data: eventData } = useEvent(eventId);
+
   const {
     watch,
     setValue,
@@ -31,33 +32,29 @@ const FormPage = () => {
 
   useEffect(() => {
     if (watchedEventId === undefined && eventData)
-      setValue("eventId", eventData.eventId);
-
-    if (eventData?.afterPartyStatus === "DISABLED")
+      setValue("eventId", eventData.event.eventId);
+    if (
+      eventData &&
+      new Date(eventData.event.applicationPeriod.endDate) < new Date()
+    )
+      setErrorModalStatus("EVENT_NOT_APPLICABLE_OUTSIDE_APPLICATION_PERIOD");
+    if (eventData?.event.afterPartyStatus === "DISABLED")
       setValue("afterPartyApplicationStatus", "NONE");
+    if (eventData) document.title = `와우이벤트 | ${eventData?.event.name}`;
   }, [eventData, watchedEventId]);
 
-  return fetchError?.response?.data.errorCodeName ? (
-    <Flex
-      direction="column"
-      justify="center"
-      align="center"
-      style={{ paddingTop: 100 }}
-    >
-      <ErrorText errorCode={fetchError.response.data.errorCodeName} />
-    </Flex>
-  ) : (
+  return (
     eventData && (
       <Flex justify="center">
         {errorModalStatus === "EVENT_NOT_APPLICABLE_NOT_REGULAR_ROLE" && (
           <ErrorModal onClose={() => setErrorModalStatus(undefined)} />
         )}
         <Flex direction="column" align="center" gap={isMobile ? 20 : 40}>
-          <FormTitle title={eventData.name} />
-          {errorModalStatus === "PARTICIPATION_DUPLICATE" ? (
+          <FormTitle title={eventData.event.name} />
+          {errorModalStatus &&
+          errorModalStatus !== "EVENT_NOT_APPLICABLE_NOT_REGULAR_ROLE" ? (
             <Text style={{ width: "min(988px,90%)" }}>
-              이미 신청한 행사예요. 변경사항이 있을 경우 카카오톡 플러스채널을
-              통해 문의해주세요.
+              {ERROR_MESSAGES[errorModalStatus]}
             </Text>
           ) : isSubmitSuccessful ? (
             <Text style={{ width: "min(988px,90%)" }}>
@@ -68,13 +65,9 @@ const FormPage = () => {
               direction="column"
               align="center"
               width={"min(988px, 90%)"}
-              gap={isMobile ? 28 : 120}
+              gap={isMobile ? 12 : 18}
             >
-              <FormDescription
-                startAt={eventData.startAt}
-                venue={eventData.venue}
-                applicationDescription={eventData.applicationDescription}
-              />
+              <FormDescription eventData={eventData} />
               <FormQuestions
                 event={eventData}
                 errorHandler={(errorCode: ErrorCodeType) => {

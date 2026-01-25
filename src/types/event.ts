@@ -1,12 +1,18 @@
 export type QuestionStatus = "ENABLED" | "DISABLED";
 export type AfterPartyStatus = "NONE" | "NOT_APPLIED" | "APPLIED";
 
-export interface EventDtoType {
+type Participant = { name: string; studentId: string; phone: string };
+
+export interface ParticipantValidationDto {
+  eventId: number;
+  participant: Participant;
+}
+export interface EventType {
   eventId: number;
   name: string;
   venue: string;
   startAt: string;
-  applicationDescription: string;
+  description: string;
   applicationPeriod: {
     startDate: string;
     endDate: string;
@@ -21,8 +27,20 @@ export interface EventDtoType {
   afterPartyMaxApplicantCount: number;
 }
 
+export interface EventResponseDtoType {
+  event: EventType;
+  mainEventCurrentApplicantCount: number;
+  afterPartyCurrentApplicantCount: number;
+  eventStatus: string;
+}
+
 export interface EventApplyDtoType {
   eventId: number;
-  participant: { name: string; studentId: string; phone: string };
+  participant: Participant;
   afterPartyApplicationStatus: AfterPartyStatus;
+}
+
+export interface ParticipantValidationResponse {
+  isParticipable: boolean;
+  errorCodeName: string;
 }
